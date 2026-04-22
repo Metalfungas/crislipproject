@@ -7,23 +7,46 @@
 
 <style>
 * {
-  html, body {
-  height: 100%;
-}
-  .hero {
-  position: relative;
-  z-index: 2;
-}
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: #050507;
   color: white;
-  overflow-x: hidden; /* important for custom scroll */
+  overflow-x: hidden;
+}
+
+/* 🔥 NEON FRAME */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  padding: 5px;
+  pointer-events: none;
+  z-index: 9999;
+  background: linear-gradient(90deg, #ff2bd6, #00f5ff, #ff2bd6);
+  background-size: 300% 300%;
+  animation: neon 6s linear infinite;
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  box-shadow: 0 0 15px #ff2bd6, 0 0 25px #00f5ff;
+}
+
+@keyframes neon {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 /* NAV */
@@ -38,117 +61,94 @@ nav {
   background: rgba(0,0,0,0.4);
   z-index: 1000;
 }
+
 nav a {
   color: #aaa;
   margin-left: 20px;
   text-decoration: none;
 }
-nav a:hover { color: white; }
 
-/* INTRO */
+/* HERO */
 .hero {
   height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-  text-align: center;
+  justify-content: center;
+  padding: 0 10%;
   position: relative;
 }
 
 .hero h1 {
   font-size: 4rem;
-  letter-spacing: 3px;
-  animation: fadeUp 2s ease forwards;
-  opacity: 0;
 }
 
 .hero p {
-  margin-top: 15px;
   color: #aaa;
-  max-width: 600px;
-  animation: fadeUp 2s 0.5s ease forwards;
-  opacity: 0;
+  max-width: 500px;
+  margin-top: 15px;
 }
 
-.hero button {
-  margin-top: 25px;
-  padding: 12px 26px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  animation: fadeUp 2s 1s ease forwards;
-  opacity: 0;
-}
-
-@keyframes fadeUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* GLITCH */
-.glitch {
-  position: relative;
-}
-
-.glitch::before,
-.glitch::after {
-  content: "The Hypnotists";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  overflow: hidden;
-}
-
-.glitch::before {
-  left: 2px;
-  text-shadow: -2px 0 red;
-  animation: glitch 2s infinite;
-}
-
-.glitch::after {
-  left: -2px;
-  text-shadow: -2px 0 blue;
-  animation: glitch 2s infinite reverse;
-}
-
-@keyframes glitch {
-  0% { clip-path: inset(0 0 90% 0); }
-  50% { clip-path: inset(40% 0 30% 0); }
-  100% { clip-path: inset(0 0 90% 0); }
-}
-
-/* SECTIONS */
-section {
-  padding: 140px 10%;
+/* 🔥 PARALLAX SECTION BASE */
+.section {
   min-height: 100vh;
-  opacity: 0;
-  transform: translateY(60px);
-  transition: 1s ease;
-}
-
-section.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 100px 10%;
 }
 
-img {
-  width: 100%;
-  border-radius: 18px;
-  box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+/* TEXT BLOCK */
+.text {
+  z-index: 3;
+  max-width: 600px;
+}
+
+/* 🧠 IMAGE AURA LAYER (THE COOL PART) */
+.image-layer {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  filter: blur(0px);
+  opacity: 0.35;
+  transform: scale(1.1);
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+/* glow aura behind image */
+.image-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  filter: blur(60px) brightness(1.5);
+  opacity: 0.8;
+  z-index: -1;
+}
+
+/* STORY IMAGE */
+.story-img {
+  background: url("https://m.media-amazon.com/images/I/71HDyXcGXXL._AC_UF1000,1000_QL80_.jpg") center/cover;
+  border-radius: 20px;
+}
+
+/* BOOK IMAGE */
+.book-img {
+  background: url("https://cdn.vectorstock.com/i/500p/46/25/blue-black-spiral-vortex-pattern-vector-61514625.jpg") center/cover;
+  border-radius: 20px;
+}
+
+/* PARALLAX MOVEMENT */
+@media (min-width: 768px) {
+  .story-img, .book-img {
+    transform: translateY(40px);
+  }
 }
 
 h2 {
   font-size: 2.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 p {
@@ -156,29 +156,10 @@ p {
   line-height: 1.6;
 }
 
-/* PARALLAX GLOW */
-.glow {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: rgba(255,255,255,0.05);
-  filter: blur(120px);
-  border-radius: 50%;
-}
-
-.glow1 { top: 20%; left: 10%; }
-.glow2 { bottom: 10%; right: 10%; }
-
 /* MOBILE */
 @media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .hero h1 {
-    font-size: 2.8rem;
-  }
+  .hero h1 { font-size: 2.8rem; }
+  .image-layer { width: 300px; height: 300px; }
 }
 </style>
 </head>
@@ -190,120 +171,40 @@ p {
   <div>
     <a href="#story">Story</a>
     <a href="#book">Book</a>
-    <a href="#about">About</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="glow glow1"></div>
-  <div class="glow glow2"></div>
-
-  <h1 class="glitch">The Hypnotists</h1>
-  <p>A cinematic psychological experience where perception breaks.</p>
-  <button onclick="scrollToSection('story')">Enter</button>
+  <h1>The Hypnotists</h1>
+  <p>A psychological illusion where reality bends and images follow your mind.</p>
 </div>
 
 <!-- STORY -->
-<section id="story">
-  <div class="grid">
-    <div>
-      <h2>The Story</h2>
-      <p>Minds are manipulated without awareness. Reality bends under hidden influence.</p>
-    </div>
-    <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f"/>
+<div class="section" id="story">
+  <div class="image-layer story-img"></div>
+
+  <div class="text">
+    <h2>The Story</h2>
+    <p>
+      A hidden force manipulates perception. The deeper you go, the less real things become.
+      Images begin to follow thought instead of time.
+    </p>
   </div>
-</section>
+</div>
 
 <!-- BOOK -->
-<section id="book">
-  <div class="grid">
-    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794"/>
-    <div>
-      <h2>The Book</h2>
-      <p>A psychological thriller exploring memory, control, and identity collapse.</p>
-    </div>
+<div class="section" id="book">
+  <div class="image-layer book-img"></div>
+
+  <div class="text">
+    <h2>The Book</h2>
+    <p>
+      A spiral into identity loss, hypnosis, and memory distortion.
+      Nothing you see can be trusted.
+    </p>
   </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <h2>About</h2>
-  <p>Apple-style cinematic UI with smooth physics-based scrolling and immersive design.</p>
-</section>
-
-<script>
-/* =======================
-   iOS STYLE SCROLL ENGINE
-======================= */
-
-let current = window.scrollY;
-let target = window.scrollY;
-let velocity = 0;
-  
-window.scrollTo(0, 0);
-
-const ease = 0.12;
-const friction = 0.90;
-
-function clamp(v, min, max) {
-  return Math.max(min, Math.min(max, v));
-}
-
-/* WHEEL */
-window.addEventListener("wheel", (e) => {
-  e.preventDefault();
-  velocity += e.deltaY * 0.20;
-}, { passive: false });
-
-/* TOUCH */
-let lastY = null;
-
-window.addEventListener("touchstart", (e) => {
-  lastY = e.touches[0].clientY;
-});
-
-window.addEventListener("touchmove", (e) => {
-  const y = e.touches[0].clientY;
-  const delta = lastY - y;
-  velocity += delta * 0.40
-  lastY = y;
-});
-
-/* ANIMATION LOOP */
-function animate() {
-  const max = document.body.scrollHeight - window.innerHeight;
-
-  target += velocity;
-  velocity *= friction;
-
-  target = clamp(target, 0, max);
-
-  current += (target - current) * ease;
-
-  window.scrollTo(0, current);
-
-  requestAnimationFrame(animate);
-}
-animate();
-
-/* SECTION FADE IN */
-const sections = document.querySelectorAll("section");
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add("show");
-  });
-}, { threshold: 0.2 });
-
-sections.forEach(s => observer.observe(s));
-
-/* BUTTON SCROLL */
-function scrollToSection(id) {
-  const el = document.getElementById(id);
-  target = el.offsetTop;
-}
-</script>
+</div>
 
 </body>
 </html>
