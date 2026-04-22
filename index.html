@@ -6,203 +6,174 @@
 <title>The Hypnotists</title>
 
 <style>
-  * {
-   html {
-  scroll-behavior: auto;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    scroll-behavior: smooth;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
 
-  body {
-    background: #050507;
-    color: white;
-    overflow-x: hidden;
-  }
+body {
+  background: #050507;
+  color: white;
+  overflow: hidden; /* important for custom scroll */
+}
 
-  /* ================= NAV ================= */
-  nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    padding: 18px 40px;
-    display: flex;
-    justify-content: space-between;
-    z-index: 1000;
-    backdrop-filter: blur(15px);
-    background: rgba(0,0,0,0.35);
-  }
+/* NAV */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 18px 40px;
+  display: flex;
+  justify-content: space-between;
+  backdrop-filter: blur(15px);
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
 
-  nav a {
-    color: #aaa;
-    margin-left: 20px;
-    text-decoration: none;
-    transition: 0.3s;
-  }
+nav a {
+  color: #aaa;
+  margin-left: 20px;
+  text-decoration: none;
+}
+nav a:hover { color: white; }
 
-  nav a:hover { color: white; }
+/* INTRO */
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+}
 
-  /* ================= INTRO ================= */
-  .intro {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
+.hero h1 {
+  font-size: 4rem;
+  letter-spacing: 3px;
+  animation: fadeUp 2s ease forwards;
+  opacity: 0;
+}
 
-  .intro h1 {
-    font-size: 4rem;
-    letter-spacing: 3px;
-    animation: fadeUp 2s ease forwards;
-    opacity: 0;
-  }
+.hero p {
+  margin-top: 15px;
+  color: #aaa;
+  max-width: 600px;
+  animation: fadeUp 2s 0.5s ease forwards;
+  opacity: 0;
+}
 
-  .intro p {
-    margin-top: 15px;
-    color: #aaa;
-    max-width: 600px;
-    animation: fadeUp 2s 0.5s ease forwards;
-    opacity: 0;
-  }
+.hero button {
+  margin-top: 25px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  animation: fadeUp 2s 1s ease forwards;
+  opacity: 0;
+}
 
-  .intro button {
-    margin-top: 25px;
-    padding: 12px 26px;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    background: white;
-    color: black;
-    animation: fadeUp 2s 1s ease forwards;
-    opacity: 0;
-  }
+@keyframes fadeUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 
-  @keyframes fadeUp {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
+/* GLITCH */
+.glitch {
+  position: relative;
+}
 
-  /* ================= PARALLAX ================= */
-  .parallax {
-    position: absolute;
-    width: 120%;
-    height: 120%;
-    top: -10%;
-    left: -10%;
-    background: radial-gradient(circle at center, #1a1a2e, #050507);
-    transform: translateZ(0);
-    z-index: -1;
-  }
+.glitch::before,
+.glitch::after {
+  content: "The Hypnotists";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
 
-  .glow {
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    background: rgba(255,255,255,0.05);
-    filter: blur(120px);
-    border-radius: 50%;
-    animation: float 8s infinite ease-in-out;
-  }
+.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 red;
+  animation: glitch 2s infinite;
+}
 
-  .glow:nth-child(1) { top: 10%; left: 20%; }
-  .glow:nth-child(2) { bottom: 10%; right: 20%; }
+.glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 blue;
+  animation: glitch 2s infinite reverse;
+}
 
-  @keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(40px); }
-  }
+@keyframes glitch {
+  0% { clip-path: inset(0 0 90% 0); }
+  50% { clip-path: inset(40% 0 30% 0); }
+  100% { clip-path: inset(0 0 90% 0); }
+}
 
-  /* ================= SECTIONS ================= */
-  section {
-    padding: 140px 10%;
-    opacity: 0;
-    transform: translateY(60px);
-    transition: 1s ease;
-  }
+/* SECTIONS */
+section {
+  padding: 140px 10%;
+  min-height: 100vh;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: 1s ease;
+}
 
-  section.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
+section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+img {
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+p {
+  color: #aaa;
+  line-height: 1.6;
+}
+
+/* PARALLAX GLOW */
+.glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: rgba(255,255,255,0.05);
+  filter: blur(120px);
+  border-radius: 50%;
+}
+
+.glow1 { top: 20%; left: 10%; }
+.glow2 { bottom: 10%; right: 10%; }
+
+/* MOBILE */
+@media (max-width: 768px) {
   .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
+    grid-template-columns: 1fr;
+    text-align: center;
   }
 
-  img {
-    width: 100%;
-    border-radius: 18px;
-    box-shadow: 0 20px 80px rgba(0,0,0,0.6);
-    transition: transform 0.6s;
+  .hero h1 {
+    font-size: 2.8rem;
   }
-
-  img:hover { transform: scale(1.03); }
-
-  h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-  }
-
-  p {
-    color: #aaa;
-    line-height: 1.6;
-  }
-
-  /* ================= GLITCH EFFECT ================= */
-  .glitch {
-    position: relative;
-    display: inline-block;
-  }
-
-  .glitch::before,
-  .glitch::after {
-    content: "The Hypnotists";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  .glitch::before {
-    left: 2px;
-    text-shadow: -2px 0 red;
-    animation: glitch 2s infinite;
-  }
-
-  .glitch::after {
-    left: -2px;
-    text-shadow: -2px 0 blue;
-    animation: glitch 2s infinite reverse;
-  }
-
-  @keyframes glitch {
-    0% { clip-path: inset(0 0 90% 0); }
-    20% { clip-path: inset(20% 0 50% 0); }
-    40% { clip-path: inset(40% 0 30% 0); }
-    60% { clip-path: inset(10% 0 60% 0); }
-    80% { clip-path: inset(70% 0 10% 0); }
-    100% { clip-path: inset(0 0 90% 0); }
-  }
-
-  /* ================= MOBILE ================= */
-  @media (max-width: 768px) {
-    .grid {
-      grid-template-columns: 1fr;
-      text-align: center;
-    }
-
-    .intro h1 { font-size: 2.8rem; }
-  }
+}
 </style>
 </head>
 
@@ -217,17 +188,14 @@
   </div>
 </nav>
 
-<!-- INTRO -->
-<div class="intro">
-  <div class="parallax"></div>
-  <div class="glow"></div>
-  <div class="glow"></div>
+<!-- HERO -->
+<div class="hero">
+  <div class="glow glow1"></div>
+  <div class="glow glow2"></div>
 
   <h1 class="glitch">The Hypnotists</h1>
-  <p>A cinematic psychological experience where perception is no longer real.</p>
-  <button onclick="document.getElementById('story').scrollIntoView()">
-    Enter Experience
-  </button>
+  <p>A cinematic psychological experience where perception breaks.</p>
+  <button onclick="scrollToSection('story')">Enter</button>
 </div>
 
 <!-- STORY -->
@@ -235,24 +203,19 @@
   <div class="grid">
     <div>
       <h2>The Story</h2>
-      <p>
-        Minds are being rewritten without awareness. Reality bends under hidden influence,
-        and the truth becomes something unstable.
-      </p>
+      <p>Minds are manipulated without awareness. Reality bends under hidden influence.</p>
     </div>
-    <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" />
+    <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f"/>
   </div>
 </section>
 
 <!-- BOOK -->
 <section id="book">
   <div class="grid">
-    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" />
+    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794"/>
     <div>
       <h2>The Book</h2>
-      <p>
-        A psychological thriller blending memory manipulation, identity loss, and hidden control systems.
-      </p>
+      <p>A psychological thriller exploring memory, control, and identity collapse.</p>
     </div>
   </div>
 </section>
@@ -260,14 +223,63 @@
 <!-- ABOUT -->
 <section id="about">
   <h2>About</h2>
-  <p>
-    Designed as a cinematic Apple-style experience with parallax motion,
-    animated transitions, and glitch perception effects.
-  </p>
+  <p>Apple-style cinematic UI with smooth physics-based scrolling and immersive design.</p>
 </section>
 
 <script>
-/* scroll reveal */
+/* =======================
+   iOS STYLE SCROLL ENGINE
+======================= */
+
+let current = window.scrollY;
+let target = window.scrollY;
+let velocity = 0;
+
+const ease = 0.08;
+const friction = 0.92;
+
+function clamp(v, min, max) {
+  return Math.max(min, Math.min(max, v));
+}
+
+/* WHEEL */
+window.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  velocity += e.deltaY * 0.6;
+}, { passive: false });
+
+/* TOUCH */
+let lastY = null;
+
+window.addEventListener("touchstart", (e) => {
+  lastY = e.touches[0].clientY;
+});
+
+window.addEventListener("touchmove", (e) => {
+  const y = e.touches[0].clientY;
+  const delta = lastY - y;
+  velocity += delta * 1.2;
+  lastY = y;
+});
+
+/* ANIMATION LOOP */
+function animate() {
+  const max = document.body.scrollHeight - window.innerHeight;
+
+  target += velocity;
+  velocity *= friction;
+
+  target = clamp(target, 0, max);
+
+  current += (target - current) * ease;
+
+  window.scrollTo(0, current);
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* SECTION FADE IN */
 const sections = document.querySelectorAll("section");
 
 const observer = new IntersectionObserver(entries => {
@@ -278,44 +290,12 @@ const observer = new IntersectionObserver(entries => {
 
 sections.forEach(s => observer.observe(s));
 
-/* parallax movement */
-document.addEventListener("mousemove", (e) => {
-  const x = (window.innerWidth - e.pageX) / 50;
-  const y = (window.innerHeight - e.pageY) / 50;
-  document.querySelector(".parallax").style.transform =
-    `translate(${x}px, ${y}px)`;
-});
-</script>
-<script>
-let targetScroll = window.scrollY;
-let currentScroll = window.scrollY;
-let isScrolling = false;
-
-window.addEventListener("wheel", (e) => {
-  e.preventDefault();
-
-  targetScroll += e.deltaY;
-  targetScroll = Math.max(
-    0,
-    Math.min(document.body.scrollHeight - window.innerHeight, targetScroll)
-  );
-
-  if (!isScrolling) smoothScroll();
-}, { passive: false });
-
-function smoothScroll() {
-  isScrolling = true;
-
-  currentScroll += (targetScroll - currentScroll) * 0.08;
-
-  window.scrollTo(0, currentScroll);
-
-  if (Math.abs(targetScroll - currentScroll) > 0.5) {
-    requestAnimationFrame(smoothScroll);
-  } else {
-    isScrolling = false;
-  }
+/* BUTTON SCROLL */
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  target = el.offsetTop;
 }
 </script>
+
 </body>
 </html>
