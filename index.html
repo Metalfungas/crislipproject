@@ -7,6 +7,13 @@
 
 <style>
 * {
+  html, body {
+  height: 100%;
+}
+  .hero {
+  position: relative;
+  z-index: 2;
+}
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -234,6 +241,8 @@ p {
 let current = window.scrollY;
 let target = window.scrollY;
 let velocity = 0;
+  
+window.scrollTo(0, 0);
 
 const ease = 0.08;
 const friction = 0.92;
