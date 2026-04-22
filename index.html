@@ -6,6 +6,7 @@
 <title>The Hypnotists</title>
 
 <style>
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -13,6 +14,7 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+/* 🔥 NATURAL SMOOTH SCROLL (OPTION A) */
 html {
   scroll-behavior: smooth;
 }
@@ -23,7 +25,7 @@ body {
   overflow-x: hidden;
 }
 
-/* 🔥 NEON FRAME */
+/* 🔥 NEON BORDER (LIGHTWEIGHT + NO LAG) */
 body::before {
   content: "";
   position: fixed;
@@ -31,9 +33,10 @@ body::before {
   padding: 5px;
   pointer-events: none;
   z-index: 9999;
+
   background: linear-gradient(90deg, #ff2bd6, #00f5ff, #ff2bd6);
   background-size: 300% 300%;
-  animation: neon 6s linear infinite;
+  animation: neonMove 6s linear infinite;
 
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
@@ -41,10 +44,12 @@ body::before {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 
-  box-shadow: 0 0 15px #ff2bd6, 0 0 25px #00f5ff;
+  box-shadow:
+    0 0 10px #ff2bd6,
+    0 0 15px #00f5ff;
 }
 
-@keyframes neon {
+@keyframes neonMove {
   0% { background-position: 0% 50%; }
   100% { background-position: 100% 50%; }
 }
@@ -68,87 +73,62 @@ nav a {
   text-decoration: none;
 }
 
+nav a:hover {
+  color: white;
+}
+
 /* HERO */
 .hero {
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 0 10%;
-  position: relative;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
 }
 
 .hero h1 {
   font-size: 4rem;
+  letter-spacing: 3px;
 }
 
 .hero p {
-  color: #aaa;
-  max-width: 500px;
   margin-top: 15px;
-}
-
-/* 🔥 PARALLAX SECTION BASE */
-.section {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 100px 10%;
-}
-
-/* TEXT BLOCK */
-.text {
-  z-index: 3;
+  color: #aaa;
   max-width: 600px;
 }
 
-/* 🧠 IMAGE AURA LAYER (THE COOL PART) */
-.image-layer {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  filter: blur(0px);
-  opacity: 0.35;
-  transform: scale(1.1);
-  z-index: 1;
-  transition: transform 0.3s ease;
+button {
+  margin-top: 25px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
 }
 
-/* glow aura behind image */
-.image-layer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: inherit;
-  filter: blur(60px) brightness(1.5);
-  opacity: 0.8;
-  z-index: -1;
+/* SECTIONS */
+section {
+  padding: 140px 10%;
+  min-height: 100vh;
 }
 
-/* STORY IMAGE */
-.story-img {
-  background: url("https://m.media-amazon.com/images/I/71HDyXcGXXL._AC_UF1000,1000_QL80_.jpg") center/cover;
-  border-radius: 20px;
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
 }
 
-/* BOOK IMAGE */
-.book-img {
-  background: url("https://cdn.vectorstock.com/i/500p/46/25/blue-black-spiral-vortex-pattern-vector-61514625.jpg") center/cover;
-  border-radius: 20px;
-}
-
-/* PARALLAX MOVEMENT */
-@media (min-width: 768px) {
-  .story-img, .book-img {
-    transform: translateY(40px);
-  }
+img {
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
 
 h2 {
   font-size: 2.5rem;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 p {
@@ -158,8 +138,14 @@ p {
 
 /* MOBILE */
 @media (max-width: 768px) {
-  .hero h1 { font-size: 2.8rem; }
-  .image-layer { width: 300px; height: 300px; }
+  .grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 2.8rem;
+  }
 }
 </style>
 </head>
@@ -171,40 +157,46 @@ p {
   <div>
     <a href="#story">Story</a>
     <a href="#book">Book</a>
+    <a href="#about">About</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
   <h1>The Hypnotists</h1>
-  <p>A psychological illusion where reality bends and images follow your mind.</p>
+  <p>A cinematic psychological experience where perception bends and reality breaks.</p>
+  <button onclick="document.getElementById('story').scrollIntoView({behavior:'smooth'})">
+    Enter Experience
+  </button>
 </div>
 
 <!-- STORY -->
-<div class="section" id="story">
-  <div class="image-layer story-img"></div>
-
-  <div class="text">
-    <h2>The Story</h2>
-    <p>
-      A hidden force manipulates perception. The deeper you go, the less real things become.
-      Images begin to follow thought instead of time.
-    </p>
+<section id="story">
+  <div class="grid">
+    <div>
+      <h2>The Story</h2>
+      <p>Minds are manipulated without awareness. Reality is not stable anymore.</p>
+    </div>
+    <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f"/>
   </div>
-</div>
+</section>
 
 <!-- BOOK -->
-<div class="section" id="book">
-  <div class="image-layer book-img"></div>
-
-  <div class="text">
-    <h2>The Book</h2>
-    <p>
-      A spiral into identity loss, hypnosis, and memory distortion.
-      Nothing you see can be trusted.
-    </p>
+<section id="book">
+  <div class="grid">
+    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794"/>
+    <div>
+      <h2>The Book</h2>
+      <p>A psychological thriller about control, memory, and identity collapse.</p>
+    </div>
   </div>
-</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2>About</h2>
+  <p>Minimal Apple-style design with neon cyber aesthetics and smooth native scrolling.</p>
+</section>
 
 </body>
 </html>
