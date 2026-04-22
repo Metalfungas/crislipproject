@@ -38,53 +38,6 @@ nav {
   background: rgba(0,0,0,0.4);
   z-index: 1000;
 }
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: #050507;
-  position: relative;
-}
-
-/* INNER PAGE WRAPPER (this creates the border gap) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  padding: 6px; /* thickness of border */
-  pointer-events: none;
-  z-index: 9999;
-
-  /* neon gradient border */
-  background: linear-gradient(
-    90deg,
-    #ff2bd6,
-    #00f5ff,
-    #ff2bd6
-  );
-
-  background-size: 300% 300%;
-  animation: neonMove 5s linear infinite;
-
-  /* CUT OUT CENTER so ONLY border shows */
-  -webkit-mask: 
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-
-  /* REAL glow */
-  box-shadow:
-    0 0 10px #ff2bd6,
-    0 0 20px #ff2bd6,
-    0 0 10px #00f5ff,
-    0 0 25px #00f5ff;
-}
-
-/* animation for gradient movement */
-@keyframes neonMove {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
 nav a {
   color: #aaa;
   margin-left: 20px;
