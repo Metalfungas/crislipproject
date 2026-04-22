@@ -244,8 +244,8 @@ let velocity = 0;
   
 window.scrollTo(0, 0);
 
-const ease = 0.07;
-const friction = 0.90;
+const ease = 0.06;
+const friction = 0.88;
 
 function clamp(v, min, max) {
   return Math.max(min, Math.min(max, v));
@@ -254,7 +254,7 @@ function clamp(v, min, max) {
 /* WHEEL */
 window.addEventListener("wheel", (e) => {
   e.preventDefault();
-  velocity += e.deltaY * 0.3;
+  velocity += e.deltaY * 0.15;
 }, { passive: false });
 
 /* TOUCH */
@@ -267,7 +267,7 @@ window.addEventListener("touchstart", (e) => {
 window.addEventListener("touchmove", (e) => {
   const y = e.touches[0].clientY;
   const delta = lastY - y;
-  velocity += delta * 0.55
+  velocity += delta * 0.35
   lastY = y;
 });
 
