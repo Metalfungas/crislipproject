@@ -2,84 +2,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Hypnotists - Gordon Korman</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Hypnotists</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
-/* ==========================
-   GLOBAL RESET
-========================== */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:'Inter', sans-serif;
+  font-family:Inter, sans-serif;
 }
 
-html,body{
-  height:100%;
-  scroll-behavior:smooth;
-  background:#000;
-  color:#fff;
+body{
+  background:black;
+  color:white;
   overflow-x:hidden;
 }
 
-/* ==========================
-   GALAXY BACKGROUND
-========================== */
-body::before{
-  content:"";
+/* ================= GALAXY CANVAS ================= */
+canvas{
   position:fixed;
   top:0;
   left:0;
   width:100%;
   height:100%;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(120,0,255,0.25), transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(0,200,255,0.2), transparent 35%),
-    radial-gradient(circle at 50% 80%, rgba(255,0,120,0.15), transparent 40%),
-    #05060a;
-  z-index:-3;
-  animation: galaxyShift 20s infinite alternate ease-in-out;
 }
 
-@keyframes galaxyShift{
-  0%{transform:scale(1) rotate(0deg);}
-  100%{transform:scale(1.2) rotate(2deg);}
-}
+#bg{z-index:-3;}
+#stars{z-index:-2;}
+#particles{z-index:-1;}
 
-/* STAR LAYER */
-#stars{
-  position:fixed;
-  width:100%;
-  height:100%;
-  z-index:-2;
-}
-
-/* PARTICLES */
-#particles{
-  position:fixed;
-  width:100%;
-  height:100%;
-  z-index:-1;
-}
-   #galaxy{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  z-index:-999;
-  background:black;
-}
-
-/* ==========================
-   HERO SECTION
-========================== */
+/* ================= HERO ================= */
 .hero{
   height:100vh;
   display:flex;
@@ -87,53 +42,42 @@ body::before{
   justify-content:center;
   align-items:center;
   text-align:center;
-  padding:20px;
 }
 
 .hero h1{
   font-size:4rem;
-  letter-spacing:3px;
   opacity:0;
-  transform:translateY(40px);
-  animation: slideIn 1.2s forwards ease;
+  animation:fadeUp 1s forwards;
 }
 
 .hero p{
   margin-top:10px;
   opacity:0;
-  transform:translateY(40px);
-  animation: slideIn 1.5s forwards ease;
+  animation:fadeUp 1.3s forwards;
 }
 
-@keyframes slideIn{
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-.enter-btn{
-  margin-top:30px;
-  padding:12px 25px;
+button{
+  margin-top:25px;
+  padding:12px 28px;
   border:none;
-  border-radius:30px;
+  border-radius:999px;
   background:linear-gradient(90deg,#6a00ff,#00d4ff);
-  color:#fff;
+  color:white;
   cursor:pointer;
-  font-size:1rem;
   transition:0.3s;
-  opacity:0;
-  animation: slideIn 1.8s forwards ease;
 }
 
-.enter-btn:hover{
-  transform:scale(1.1);
-  box-shadow:0 0 20px rgba(0,200,255,0.6);
+button:hover{
+  transform:scale(1.08);
+  box-shadow:0 0 25px rgba(0,200,255,0.4);
 }
 
-/* ==========================
-   CHARACTERS SECTION
-========================== */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(30px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* ================= CHARACTERS ================= */
 .section{
   padding:120px 20px;
 }
@@ -142,9 +86,6 @@ body::before{
   text-align:center;
   font-size:2.5rem;
   margin-bottom:60px;
-  opacity:0;
-  transform:translateY(40px);
-  transition:1s;
 }
 
 .cards{
@@ -156,23 +97,21 @@ body::before{
 
 .card{
   width:260px;
+  padding:20px;
+  border-radius:20px;
   background:rgba(255,255,255,0.05);
   border:1px solid rgba(255,255,255,0.1);
-  border-radius:20px;
-  padding:20px;
-  text-align:center;
   backdrop-filter:blur(10px);
   opacity:0;
-  transform:translateY(60px);
+  transform:translateY(40px);
   transition:1s;
+  text-align:center;
 }
 
 .card img{
   width:100%;
   height:240px;
   object-fit:contain;
-  margin-bottom:15px;
-  filter:drop-shadow(0 0 12px rgba(255,255,255,0.2));
 }
 
 .card h3{
@@ -185,17 +124,11 @@ body::before{
   margin-top:8px;
 }
 
-/* ==========================
-   SCROLL ANIMATION ACTIVE
-========================== */
 .show{
   opacity:1 !important;
   transform:translateY(0) !important;
 }
 
-/* ==========================
-   FOOTER
-========================== */
 footer{
   text-align:center;
   padding:50px;
@@ -203,237 +136,159 @@ footer{
 }
 </style>
 </head>
+
 <body>
-   
-<canvas id="galaxy"></canvas>
+
+<canvas id="bg"></canvas>
 <canvas id="stars"></canvas>
 <canvas id="particles"></canvas>
 
-<!-- HERO -->
-<div class="hero" id="hero">
+<div class="hero">
   <h1>The Hypnotists</h1>
-  <p>Gordon Korman • Cinematic School Project</p>
-  <button class="enter-btn" onclick="scrollToCharacters()">Enter</button>
+  <p>Gordon Korman • Cinematic Project</p>
+  <button onclick="document.getElementById('characters').scrollIntoView({behavior:'smooth'})">Enter</button>
 </div>
 
-<!-- CHARACTERS -->
 <div class="section" id="characters">
-  <h2 class="reveal">Characters</h2>
-
+  <h2>Characters</h2>
   <div class="cards">
 
     <div class="card reveal">
-      <img src="jax.png" alt="Jax Opus" />
+      <img src="jax.png" alt="Jax">
       <h3>Jax Opus</h3>
-      <p>A mysterious boy connected to hypnotic powers and hidden truth.</p>
+      <p>Mysterious hypnotic abilities.</p>
     </div>
 
     <div class="card reveal">
-      <img src="elias.png" alt="Dr Elias Mako" />
+      <img src="elias.png" alt="Elias">
       <h3>Dr. Elias Mako</h3>
-      <p>A brilliant scientist pushing the limits of human control.</p>
+      <p>Dangerous mind experiment scientist.</p>
     </div>
 
     <div class="card reveal">
-      <img src="tommy.png" alt="Tommy" />
+      <img src="tommy.png" alt="Tommy">
       <h3>Tommy</h3>
-      <p>A loyal friend caught in the psychological experiment storm.</p>
+      <p>Loyal friend caught in chaos.</p>
     </div>
 
   </div>
 </div>
 
-<footer>
-  Made for GitHub Pages • Cinematic Fan Project
-</footer>
+<footer>GitHub Pages Ready • Galaxy Build</footer>
 
 <script>
-/* ==========================
-   SCROLL BUTTON
-========================== */
-function scrollToCharacters(){
-  document.getElementById('characters').scrollIntoView({behavior:'smooth'});
+
+const bg = document.getElementById("bg");
+const starsCanvas = document.getElementById("stars");
+const particlesCanvas = document.getElementById("particles");
+
+const b = bg.getContext("2d");
+const s = starsCanvas.getContext("2d");
+const p = particlesCanvas.getContext("2d");
+
+function resize(){
+  bg.width = starsCanvas.width = particlesCanvas.width = innerWidth;
+  bg.height = starsCanvas.height = particlesCanvas.height = innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+/* ================= NEBULA ================= */
+function nebula(){
+  let t = Date.now()*0.00005;
+
+  let g = b.createRadialGradient(
+    innerWidth/2 + Math.cos(t)*200,
+    innerHeight/2 + Math.sin(t)*200,
+    0,
+    innerWidth/2,
+    innerHeight/2,
+    innerWidth
+  );
+
+  g.addColorStop(0,"rgba(120,0,255,0.15)");
+  g.addColorStop(0.5,"rgba(0,200,255,0.08)");
+  g.addColorStop(1,"transparent");
+
+  b.fillStyle = g;
+  b.fillRect(0,0,bg.width,bg.height);
 }
 
-/* ==========================
-   INTERSECTION OBSERVER
-========================== */
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      entry.target.classList.add('show');
-    }
-  });
-});
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-/* ==========================
-   STAR FIELD
-========================== */
-const starsCanvas = document.getElementById('stars');
-const sctx = starsCanvas.getContext('2d');
-
-function resizeStars(){
-  starsCanvas.width = window.innerWidth;
-  starsCanvas.height = window.innerHeight;
-}
-resizeStars();
-
+/* ================= STARS ================= */
 let stars = [];
-for(let i=0;i<200;i++){
+for(let i=0;i<400;i++){
   stars.push({
-    x:Math.random()*window.innerWidth,
-    y:Math.random()*window.innerHeight,
-    r:Math.random()*1.5,
-    d:Math.random()*0.5
+    x:Math.random()*innerWidth,
+    y:Math.random()*innerHeight,
+    r:Math.random()*1.5
   });
 }
 
 function drawStars(){
-  sctx.clearRect(0,0,starsCanvas.width,starsCanvas.height);
-  sctx.fillStyle="white";
-  stars.forEach(s=>{
-    sctx.beginPath();
-    sctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-    sctx.fill();
-    s.y += s.d;
-    if(s.y>window.innerHeight){s.y=0;}
-  });
-  requestAnimationFrame(drawStars);
-}
-drawStars();
+  s.clearRect(0,0,starsCanvas.width,starsCanvas.height);
 
-/* ==========================
-   PARTICLES
-========================== */
-const pCanvas = document.getElementById('particles');
-const pctx = pCanvas.getContext('2d');
+  for(let st of stars){
+    s.beginPath();
+    s.arc(st.x,st.y,st.r,0,Math.PI*2);
+    s.fillStyle="white";
+    s.fill();
 
-function resizeParticles(){
-  pCanvas.width = window.innerWidth;
-  pCanvas.height = window.innerHeight;
-}
-resizeParticles();
-
-let particles = [];
-for(let i=0;i<100;i++){
-  particles.push({
-    x:Math.random()*window.innerWidth,
-    y:Math.random()*window.innerHeight,
-    r:Math.random()*2,
-    dx:(Math.random()-0.5)*0.6,
-    dy:(Math.random()-0.5)*0.6
-  });
-}
-
-function animateParticles(){
-  pctx.clearRect(0,0,pCanvas.width,pCanvas.height);
-  particles.forEach(p=>{
-    pctx.beginPath();
-    pctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    pctx.fillStyle="rgba(255,255,255,0.5)";
-    pctx.fill();
-
-    p.x += p.dx;
-    p.y += p.dy;
-
-    if(p.x<0||p.x>window.innerWidth)p.dx*=-1;
-    if(p.y<0||p.y>window.innerHeight)p.dy*=-1;
-  });
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
-
-window.addEventListener('resize',()=>{
-  resizeStars();
-  resizeParticles();
-});
-   <script>
-const canvas = document.getElementById("galaxy");
-const ctx = canvas.getContext("2d");
-
-function resize(){
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-
-/* STARS */
-let stars = Array.from({length:400}, () => ({
-  x: Math.random()*canvas.width,
-  y: Math.random()*canvas.height,
-  z: Math.random()*2 + 0.2
-}));
-
-/* FLOATING NEBULA DOTS */
-let dust = Array.from({length:120}, () => ({
-  x: Math.random()*canvas.width,
-  y: Math.random()*canvas.height,
-  r: Math.random()*1.5
-}));
-
-function draw(){
-  ctx.fillStyle = "black";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  /* NEBULA GLOW */
-  let gradient = ctx.createRadialGradient(
-    canvas.width/2,
-    canvas.height/2,
-    0,
-    canvas.width/2,
-    canvas.height/2,
-    canvas.width
-  );
-
-  gradient.addColorStop(0,"rgba(120,0,255,0.15)");
-  gradient.addColorStop(0.5,"rgba(0,200,255,0.08)");
-  gradient.addColorStop(1,"transparent");
-
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  /* STARS */
-  for(let s of stars){
-    ctx.beginPath();
-    ctx.arc(s.x,s.y,s.z,0,Math.PI*2);
-    ctx.fillStyle = "white";
-    ctx.fill();
-
-    s.y += s.z * 0.6;
-
-    if(s.y > canvas.height){
-      s.y = 0;
-      s.x = Math.random()*canvas.width;
+    st.y += 0.3;
+    if(st.y > innerHeight){
+      st.y = 0;
+      st.x = Math.random()*innerWidth;
     }
   }
-
-  /* DUST PARTICLES */
-  for(let d of dust){
-    ctx.beginPath();
-    ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
-    ctx.fillStyle = "rgba(255,255,255,0.2)";
-    ctx.fill();
-
-    d.x += 0.1;
-    d.y += 0.05;
-
-    if(d.x > canvas.width) d.x = 0;
-    if(d.y > canvas.height) d.y = 0;
-  }
-
-  requestAnimationFrame(draw);
 }
 
-draw();
+/* ================= PARTICLES ================= */
+let parts = [];
+for(let i=0;i<120;i++){
+  parts.push({
+    x:Math.random()*innerWidth,
+    y:Math.random()*innerHeight,
+    vx:(Math.random()-0.5)*0.5,
+    vy:(Math.random()-0.5)*0.5
+  });
+}
 
-window.addEventListener("resize", resize);
-   
-</script>
+function drawParticles(){
+  p.clearRect(0,0,particlesCanvas.width,particlesCanvas.height);
+
+  for(let pt of parts){
+    p.beginPath();
+    p.arc(pt.x,pt.y,2,0,Math.PI*2);
+    p.fillStyle="rgba(255,255,255,0.4)";
+    p.fill();
+
+    pt.x += pt.vx;
+    pt.y += pt.vy;
+
+    if(pt.x<0) pt.x=innerWidth;
+    if(pt.x>innerWidth) pt.x=0;
+    if(pt.y<0) pt.y=innerHeight;
+    if(pt.y>innerHeight) pt.y=0;
+  }
+}
+
+function animate(){
+  nebula();
+  drawStars();
+  drawParticles();
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* ================= REVEAL ================= */
+const obs = new IntersectionObserver(e=>{
+  e.forEach(x=>{
+    if(x.isIntersecting) x.target.classList.add("show");
+  });
+});
+
+document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+
 </script>
 
-   
 </body>
 </html>
-
