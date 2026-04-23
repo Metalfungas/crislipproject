@@ -67,6 +67,15 @@ body::before{
   height:100%;
   z-index:-1;
 }
+   #galaxy{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-999;
+  background:black;
+}
 
 /* ==========================
    HERO SECTION
@@ -192,11 +201,11 @@ footer{
   padding:50px;
   opacity:0.4;
 }
-
 </style>
 </head>
 <body>
-
+   
+<canvas id="galaxy"></canvas>
 <canvas id="stars"></canvas>
 <canvas id="particles"></canvas>
 
@@ -340,8 +349,91 @@ window.addEventListener('resize',()=>{
   resizeStars();
   resizeParticles();
 });
+   <script>
+const canvas = document.getElementById("galaxy");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+
+/* STARS */
+let stars = Array.from({length:400}, () => ({
+  x: Math.random()*canvas.width,
+  y: Math.random()*canvas.height,
+  z: Math.random()*2 + 0.2
+}));
+
+/* FLOATING NEBULA DOTS */
+let dust = Array.from({length:120}, () => ({
+  x: Math.random()*canvas.width,
+  y: Math.random()*canvas.height,
+  r: Math.random()*1.5
+}));
+
+function draw(){
+  ctx.fillStyle = "black";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  /* NEBULA GLOW */
+  let gradient = ctx.createRadialGradient(
+    canvas.width/2,
+    canvas.height/2,
+    0,
+    canvas.width/2,
+    canvas.height/2,
+    canvas.width
+  );
+
+  gradient.addColorStop(0,"rgba(120,0,255,0.15)");
+  gradient.addColorStop(0.5,"rgba(0,200,255,0.08)");
+  gradient.addColorStop(1,"transparent");
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  /* STARS */
+  for(let s of stars){
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.z,0,Math.PI*2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+
+    s.y += s.z * 0.6;
+
+    if(s.y > canvas.height){
+      s.y = 0;
+      s.x = Math.random()*canvas.width;
+    }
+  }
+
+  /* DUST PARTICLES */
+  for(let d of dust){
+    ctx.beginPath();
+    ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+    ctx.fillStyle = "rgba(255,255,255,0.2)";
+    ctx.fill();
+
+    d.x += 0.1;
+    d.y += 0.05;
+
+    if(d.x > canvas.width) d.x = 0;
+    if(d.y > canvas.height) d.y = 0;
+  }
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+
+window.addEventListener("resize", resize);
+   
+</script>
 </script>
 
+   
 </body>
 </html>
 
