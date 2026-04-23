@@ -195,44 +195,53 @@ window.addEventListener("resize", resize);
 
 /* ================= NEBULA ================= */
 
-let nebulaParticles = [];
+let glows = [];
 
-for (let i = 0; i < 900; i++) {
-  nebulaParticles.push({
+for (let i = 0; i < 18; i++) {
+  glows.push({
     x: Math.random() * innerWidth,
     y: Math.random() * innerHeight,
-    r: Math.random() * 2.5,
-    vx: (Math.random() - 0.5) * 0.15,
-    vy: (Math.random() - 0.5) * 0.15,
-    hue: 220 + Math.random() * 140
+    r: 200 + Math.random() * 300,
+    vx: (Math.random() - 0.5) * 0.2,
+    vy: (Math.random() - 0.5) * 0.2,
+    color: [
+      "140, 0, 255",   // purple
+      "0, 200, 255",   // blue
+      "255, 0, 180"    // pink
+    ][Math.floor(Math.random() * 3)]
   });
 }
   
 function nebula() {
-  b.globalCompositeOperation = "source-over";
-
-  b.fillStyle = "rgba(0,0,0,0.08)";
-  b.fillRect(0, 0, bg.width, bg.height);
+  b.clearRect(0, 0, bg.width, bg.height);
 
   b.globalCompositeOperation = "lighter";
 
-  let t = Date.now() * 0.00005; // ✅ move here
+  for (let g of glows) {
 
-  for (let n of nebulaParticles) {
-    let angle = Math.sin(n.x * 0.002 + t) + Math.cos(n.y * 0.002 - t);
+    let gradient = b.createRadialGradient(
+      g.x, g.y, 0,
+      g.x, g.y, g.r
+    );
 
-    n.x += Math.cos(angle) * 0.4 + n.vx;
-    n.y += Math.sin(angle) * 0.4 + n.vy;
+    gradient.addColorStop(0, `rgba(${g.color}, 0.18)`);
+    gradient.addColorStop(0.4, `rgba(${g.color}, 0.08)`);
+    gradient.addColorStop(1, "transparent");
 
-    if (n.x < 0) n.x = innerWidth;
-    if (n.x > innerWidth) n.x = 0;
-    if (n.y < 0) n.y = innerHeight;
-    if (n.y > innerHeight) n.y = 0;
-
+    b.fillStyle = gradient;
     b.beginPath();
-    b.fillStyle = `hsla(${n.hue}, 90%, 65%, 0.03)`;
-    b.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    b.arc(g.x, g.y, g.r, 0, Math.PI * 2);
     b.fill();
+
+    // slow drift
+    g.x += g.vx;
+    g.y += g.vy;
+
+    // wrap
+    if (g.x < -300) g.x = innerWidth + 300;
+    if (g.x > innerWidth + 300) g.x = -300;
+    if (g.y < -300) g.y = innerHeight + 300;
+    if (g.y > innerHeight + 300) g.y = -300;
   }
 }
 /* ================= STARS ================= */
