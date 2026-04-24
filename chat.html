@@ -10,7 +10,6 @@
     --mx: 0;
     --my: 0;
     --glass: rgba(255,255,255,0.075);
-    --glass-strong: rgba(255,255,255,0.11);
     --border: rgba(255,255,255,0.10);
     --text: rgba(255,255,255,0.96);
     --muted: rgba(255,255,255,0.62);
@@ -103,15 +102,6 @@
     to   { transform: translate3d(calc(var(--mx) * 28px), calc(var(--my) * 28px), 0) scale(1.04); }
   }
 
-  .panel{
-    position: relative;
-    z-index: 2;
-    background: var(--glass);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(24px) saturate(150%);
-    box-shadow: var(--shadow);
-  }
-
   .hidden{
     display: none !important;
   }
@@ -133,7 +123,6 @@
     border: 1px solid rgba(255,255,255,0.12);
     backdrop-filter: blur(22px) saturate(160%);
     box-shadow: 0 30px 90px rgba(0,0,0,0.65);
-    transform: translateY(0);
     animation: popIn 520ms cubic-bezier(.2,.85,.2,1);
   }
 
@@ -681,11 +670,11 @@
 <script>
   const firebaseConfig = {
     apiKey: "PASTE_YOURS_HERE",
-    authDomain: "PASTE_YOURS_HERE",
-    projectId: "PASTE_YOURS_HERE",
-    storageBucket: "PASTE_YOURS_HERE",
-    messagingSenderId: "PASTE_YOURS_HERE",
-    appId: "PASTE_YOURS_HERE"
+    authDomain: "chat-97f6b.firebaseapp.com",
+    projectId: "chat-97f6b",
+    storageBucket: "chat-97f6b.firebasestorage.app",
+    messagingSenderId: "731606719742",
+    appId: "1:731606719742:web:c98ed97777eb33e09d99af"
   };
 
   firebase.initializeApp(firebaseConfig);
@@ -1153,7 +1142,6 @@
   });
 
   msgInput.addEventListener("blur", clearTypingStatus);
-
   window.addEventListener("beforeunload", clearTypingStatus);
 
   auth.onAuthStateChanged((u) => {
@@ -1200,7 +1188,6 @@
     });
   });
 
-  /* ---------- CINEMATIC BACKGROUND ---------- */
   const bg = document.getElementById("bg");
   const pCanvas = document.getElementById("particles");
   const bgCtx = bg.getContext("2d");
