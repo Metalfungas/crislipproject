@@ -2,172 +2,1356 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hotsmp Chat</title>
 
 <style>
-  body {
+  :root{
+    --mx: 0;
+    --my: 0;
+    --glass: rgba(255,255,255,0.075);
+    --glass-strong: rgba(255,255,255,0.11);
+    --border: rgba(255,255,255,0.10);
+    --text: rgba(255,255,255,0.96);
+    --muted: rgba(255,255,255,0.62);
+    --accent: #6d8cff;
+    --accent2: #8d6dff;
+    --shadow: 0 22px 80px rgba(0,0,0,0.55);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f1115;
+  }
+
+  body{
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, Arial, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at 20% 20%, rgba(80, 120, 255, 0.15), transparent 32%),
+      radial-gradient(circle at 80% 30%, rgba(140, 80, 255, 0.13), transparent 28%),
+      radial-gradient(circle at 50% 80%, rgba(30, 200, 255, 0.08), transparent 25%),
+      #05060a;
+  }
+
+  body::after{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at center, rgba(0,0,0,0.0), rgba(0,0,0,0.48) 70%),
+      linear-gradient(to bottom, rgba(255,255,255,0.03), transparent 12%, transparent 88%, rgba(0,0,0,0.25));
+    z-index: 0;
+  }
+
+  canvas{
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  #bg{ z-index: -4; }
+  #particles{ z-index: -3; }
+
+  .orb{
+    position: fixed;
+    width: 44vw;
+    height: 44vw;
+    min-width: 280px;
+    min-height: 280px;
+    max-width: 720px;
+    max-height: 720px;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: -2;
+    transform: translate3d(0,0,0);
+    transition: transform 120ms linear;
+    animation: floaty 16s ease-in-out infinite alternate;
+  }
+
+  .orb.one{
+    left: -10vw;
+    top: -8vw;
+    background: radial-gradient(circle at 30% 30%, rgba(126, 154, 255, 0.9), rgba(126, 154, 255, 0.08) 58%, transparent 75%);
+  }
+
+  .orb.two{
+    right: -14vw;
+    top: 10vh;
+    background: radial-gradient(circle at 35% 35%, rgba(173, 95, 255, 0.9), rgba(173, 95, 255, 0.06) 55%, transparent 74%);
+    animation-duration: 20s;
+  }
+
+  .orb.three{
+    left: 18vw;
+    bottom: -18vw;
+    background: radial-gradient(circle at 35% 35%, rgba(54, 214, 255, 0.76), rgba(54, 214, 255, 0.06) 55%, transparent 74%);
+    animation-duration: 18s;
+  }
+
+  @keyframes floaty{
+    from { transform: translate3d(calc(var(--mx) * -28px), calc(var(--my) * -28px), 0) scale(1); }
+    to   { transform: translate3d(calc(var(--mx) * 28px), calc(var(--my) * 28px), 0) scale(1.04); }
+  }
+
+  .panel{
+    position: relative;
+    z-index: 2;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(24px) saturate(150%);
+    box-shadow: var(--shadow);
+  }
+
+  .hidden{
+    display: none !important;
+  }
+
+  #loginBox{
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: 10;
+    padding: 24px;
+  }
+
+  .login-card{
+    width: min(440px, 100%);
+    padding: 24px;
+    border-radius: 24px;
+    background: rgba(9, 11, 18, 0.62);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(22px) saturate(160%);
+    box-shadow: 0 30px 90px rgba(0,0,0,0.65);
+    transform: translateY(0);
+    animation: popIn 520ms cubic-bezier(.2,.85,.2,1);
+  }
+
+  .login-title{
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin: 0 0 6px;
+  }
+
+  .login-sub{
+    margin: 0 0 18px;
+    color: var(--muted);
+    line-height: 1.45;
+    font-size: 14px;
+  }
+
+  .field-row{
+    display: grid;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .field{
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0,0,0,0.30);
+    color: var(--text);
+    border-radius: 14px;
+    padding: 13px 14px;
+    outline: none;
+    font-size: 15px;
+    transition: border-color .2s ease, transform .2s ease, background .2s ease, box-shadow .2s ease;
+  }
+
+  .field::placeholder{ color: rgba(255,255,255,0.40); }
+
+  .field:focus{
+    border-color: rgba(120,150,255,0.55);
+    background: rgba(0,0,0,0.38);
+    box-shadow: 0 0 0 4px rgba(109,140,255,0.14);
+    transform: translateY(-1px);
+  }
+
+  .btn-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .btn{
+    border: 0;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 15px;
+    font-weight: 700;
     color: white;
+    cursor: pointer;
+    transition: transform .18s cubic-bezier(.2,.85,.2,1), filter .18s ease, opacity .18s ease;
+    user-select: none;
   }
 
-  .app {
-    display: flex;
-    height: 100vh;
+  .btn:active{
+    transform: scale(0.97);
   }
 
-  .sidebar {
-    width: 200px;
-    background: #11131a;
-    padding: 15px;
+  .btn-primary{
+    background: linear-gradient(135deg, #6d8cff, #8d6dff);
+    box-shadow: 0 12px 30px rgba(109,140,255,0.22);
   }
 
-  .chat {
-    flex: 1;
-    display: flex;
+  .btn-ghost{
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .btn:hover{
+    filter: brightness(1.05);
+  }
+
+  .app{
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100dvh;
+    display: none;
     flex-direction: column;
   }
 
-  .header {
-    padding: 15px;
-    background: #151823;
-    border-bottom: 1px solid #222;
-  }
-
-  #messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 15px;
-  }
-
-  .msg {
-    margin-bottom: 10px;
-    padding: 8px;
-    background: #1b1f2a;
-    border-radius: 8px;
-  }
-
-  .name {
-    font-weight: bold;
-    color: #7aa2ff;
-    margin-right: 5px;
-  }
-
-  .input {
+  .topbar{
     display: flex;
-    padding: 10px;
-    background: #151823;
-    border-top: 1px solid #222;
-    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(10, 12, 20, 0.42);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(24px) saturate(150%);
   }
 
-  input {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    background: #222736;
+  .brand{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 160px;
+  }
+
+  .brand .title{
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .brand .subtitle{
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .channel-switcher{
+    display: inline-flex;
+    gap: 8px;
+    padding: 6px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .channel-btn{
+    border: 0;
+    color: rgba(255,255,255,0.76);
+    background: transparent;
+    padding: 9px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+
+  .channel-btn:hover{
+    transform: translateY(-1px);
     color: white;
   }
 
-  button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    background: #4c7dff;
+  .channel-btn.active{
+    background: linear-gradient(135deg, rgba(109,140,255,0.26), rgba(141,109,255,0.22));
+    color: white;
+    box-shadow: 0 10px 26px rgba(109,140,255,0.15);
+  }
+
+  .userbox{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+    justify-content: flex-end;
+  }
+
+  .userpill{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .user-label{
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .user-label .name{
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .user-label .channel{
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .avatar-mini{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: white;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+    flex: 0 0 auto;
+  }
+
+  .logout{
+    border: 0;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    padding: 9px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .18s ease, background .18s ease;
+  }
+
+  .logout:hover{
+    background: rgba(255,255,255,0.12);
+    transform: translateY(-1px);
+  }
+
+  .shell{
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .messages{
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 8px 4px 16px;
+    scroll-behavior: smooth;
+  }
+
+  .messages::-webkit-scrollbar{
+    width: 10px;
+  }
+
+  .messages::-webkit-scrollbar-thumb{
+    background: rgba(255,255,255,0.12);
+    border-radius: 999px;
+    border: 2px solid rgba(0,0,0,0);
+    background-clip: padding-box;
+  }
+
+  .empty-state{
+    margin: auto;
+    width: min(480px, 100%);
+    text-align: center;
+    color: rgba(255,255,255,0.62);
+    padding: 40px 20px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+  }
+
+  .msg{
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.18);
+    animation: msgIn 260ms cubic-bezier(.2,.85,.2,1);
+  }
+
+  .msg:hover{
+    background: rgba(255,255,255,0.07);
+  }
+
+  .avatar{
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    color: white;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14), 0 10px 22px rgba(0,0,0,0.18);
+    user-select: none;
+  }
+
+  .msg-body{
+    min-width: 0;
+  }
+
+  .msg-top{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .msg-name{
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .msg-time{
+    color: var(--muted);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .msg-text{
+    font-size: 15px;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.94);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .msg-actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .reaction-btn, .delete-btn{
+    border: 0;
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 800;
     color: white;
     cursor: pointer;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+  }
+
+  .reaction-btn:hover, .delete-btn:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.12);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+  }
+
+  .reaction-btn.active{
+    background: rgba(109,140,255,0.24);
+    border-color: rgba(109,140,255,0.28);
+  }
+
+  .typing{
+    min-height: 20px;
+    padding: 0 4px;
+    color: rgba(255,255,255,0.62);
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    transition: opacity .2s ease, transform .2s ease;
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  .typing.show{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .inputbar{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 22px;
+    background: rgba(10, 12, 20, 0.54);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(24px) saturate(150%);
+  }
+
+  .message-input{
+    width: 100%;
+    border: 0;
+    border-radius: 16px;
+    padding: 14px 16px;
+    background: rgba(0,0,0,0.34);
+    color: white;
+    outline: none;
+    font-size: 15px;
+    transition: box-shadow .2s ease, transform .2s ease, background .2s ease;
+  }
+
+  .message-input::placeholder{
+    color: rgba(255,255,255,0.42);
+  }
+
+  .message-input:focus{
+    box-shadow: 0 0 0 4px rgba(109,140,255,0.14);
+    transform: translateY(-1px);
+    background: rgba(0,0,0,0.42);
+  }
+
+  .send{
+    min-width: 108px;
+    border: 0;
+    border-radius: 16px;
+    padding: 0 16px;
+    font-weight: 800;
+    font-size: 15px;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(135deg, #6d8cff, #8d6dff);
+    box-shadow: 0 14px 30px rgba(109,140,255,0.22);
+    transition: transform .18s cubic-bezier(.2,.85,.2,1), filter .18s ease, opacity .18s ease;
+  }
+
+  .send:hover{
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+  }
+
+  .send:disabled{
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    filter: grayscale(0.12);
+  }
+
+  .slowmode{
+    font-size: 12px;
+    color: rgba(255,255,255,0.58);
+    margin-top: -2px;
+    padding-left: 4px;
+  }
+
+  .fade-switch{
+    animation: fadeSwitch .18s ease;
+  }
+
+  @keyframes fadeSwitch{
+    from { opacity: 0.55; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes msgIn{
+    from { opacity: 0; transform: translateY(10px) scale(0.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes popIn{
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @media (max-width: 760px){
+    .topbar{
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .brand, .userbox{
+      min-width: auto;
+      width: 100%;
+      justify-content: center;
+    }
+    .channel-switcher{
+      width: 100%;
+      justify-content: center;
+    }
+    .shell{
+      padding: 12px;
+    }
+    .inputbar{
+      grid-template-columns: 1fr;
+    }
+    .send{
+      width: 100%;
+      height: 48px;
+    }
   }
 </style>
-
 </head>
 <body>
 
-<div class="app">
+<canvas id="bg"></canvas>
+<canvas id="particles"></canvas>
 
-  <div class="sidebar">
-    <h3>Global</h3>
-    <p># general</p>
-  </div>
+<div class="orb one"></div>
+<div class="orb two"></div>
+<div class="orb three"></div>
 
-  <div class="chat">
+<div id="loginBox">
+  <div class="login-card">
+    <h1 class="login-title">Global Chat</h1>
+    <p class="login-sub">Make an account, pick a name, and jump into general or book.</p>
 
-    <div class="header">
-      <h3># general</h3>
+    <div class="field-row">
+      <input id="usernameInput" class="field" placeholder="username" autocomplete="username" />
+      <input id="emailInput" class="field" placeholder="email" autocomplete="email" />
+      <input id="passwordInput" class="field" type="password" placeholder="password" autocomplete="current-password" />
     </div>
 
-    <div id="messages"></div>
-
-    <div class="input">
-      <input id="nickname" placeholder="nickname" />
-      <input id="message" placeholder="message..." />
-      <button onclick="sendMessage()">Send</button>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="signup()">Sign up</button>
+      <button class="btn btn-ghost" onclick="login()">Log in</button>
     </div>
-
   </div>
-
 </div>
 
-<!-- Firebase -->
+<div id="app" class="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="title">hotsmp chat</div>
+      <div class="subtitle">cinematic global chat</div>
+    </div>
+
+    <div class="channel-switcher">
+      <button class="channel-btn active" data-channel="general" onclick="switchChannel('general')">general</button>
+      <button class="channel-btn" data-channel="book" onclick="switchChannel('book')">book</button>
+    </div>
+
+    <div class="userbox">
+      <div class="userpill">
+        <div id="miniAvatar" class="avatar-mini">?</div>
+        <div class="user-label">
+          <div id="userLabel" class="name">Not logged in</div>
+          <div id="channelLabel" class="channel">general</div>
+        </div>
+      </div>
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="shell">
+    <div id="messages" class="messages"></div>
+    <div id="typing" class="typing"></div>
+
+    <div class="inputbar panel">
+      <input id="msgInput" class="message-input" placeholder="Message general..." autocomplete="off" />
+      <button id="sendBtn" class="send" onclick="send()">Send</button>
+    </div>
+    <div class="slowmode">Slow mode: 5 seconds</div>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
-  // 🔥 YOUR FIREBASE CONFIG (you already have this)
   const firebaseConfig = {
-    apiKey: "AIzaSyAYEUWClZTftqzrAM1Y7MK3ZIuDvFOBRh4",
-    authDomain: "chat-97f6b.firebaseapp.com",
-    projectId: "chat-97f6b",
-    storageBucket: "chat-97f6b.firebasestorage.app",
-    messagingSenderId: "731606719742",
-    appId: "1:731606719742:web:c98ed97777eb33e09d99af"
+    apiKey: "PASTE_YOURS_HERE",
+    authDomain: "PASTE_YOURS_HERE",
+    projectId: "PASTE_YOURS_HERE",
+    storageBucket: "PASTE_YOURS_HERE",
+    messagingSenderId: "PASTE_YOURS_HERE",
+    appId: "PASTE_YOURS_HERE"
   };
 
   firebase.initializeApp(firebaseConfig);
+
+  const auth = firebase.auth();
   const db = firebase.firestore();
+  const FieldValue = firebase.firestore.FieldValue;
 
-  const messagesDiv = document.getElementById("messages");
+  const loginBox = document.getElementById("loginBox");
+  const appEl = document.getElementById("app");
+  const usernameInput = document.getElementById("usernameInput");
+  const emailInput = document.getElementById("emailInput");
+  const passwordInput = document.getElementById("passwordInput");
+  const userLabel = document.getElementById("userLabel");
+  const channelLabel = document.getElementById("channelLabel");
+  const miniAvatar = document.getElementById("miniAvatar");
+  const messagesEl = document.getElementById("messages");
+  const typingEl = document.getElementById("typing");
+  const msgInput = document.getElementById("msgInput");
+  const sendBtn = document.getElementById("sendBtn");
+  const channelBtns = [...document.querySelectorAll(".channel-btn")];
 
-  // 💬 live messages
-  db.collection("messages")
-    .orderBy("time")
-    .onSnapshot(snapshot => {
-      messagesDiv.innerHTML = "";
+  let currentUser = null;
+  let currentChannel = "general";
+  let messagesUnsub = null;
+  let typingUnsub = null;
+  let canSend = true;
+  let cooldownTimer = null;
+  let typingDebounce = null;
+  let typingClearTimer = null;
+  let firstAuthTick = true;
+  let audioCtx = null;
 
-      snapshot.forEach(doc => {
-        const data = doc.data();
+  function unlockAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+  }
 
-        const div = document.createElement("div");
-        div.className = "msg";
+  function tone(freq, dur, type = "sine", gain = 0.04, delay = 0) {
+    setTimeout(() => {
+      if (!audioCtx) return;
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type;
+      o.frequency.value = freq;
+      g.gain.value = 0.0001;
+      o.connect(g);
+      g.connect(audioCtx.destination);
 
-        div.innerHTML = `
-          <span class="name">${data.name}:</span>
-          <span>${data.text}</span>
-        `;
+      const now = audioCtx.currentTime;
+      g.gain.exponentialRampToValueAtTime(gain, now + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + Math.max(dur, 0.03));
+      o.start(now);
+      o.stop(now + Math.max(dur, 0.04) + 0.02);
+    }, delay);
+  }
 
-        messagesDiv.appendChild(div);
+  function playLoginSound() {
+    unlockAudio();
+    tone(440, 0.08, "triangle", 0.03, 0);
+    tone(660, 0.10, "sine", 0.025, 70);
+    tone(880, 0.12, "sine", 0.02, 140);
+  }
+
+  function playSendSound() {
+    unlockAudio();
+    tone(620, 0.05, "triangle", 0.025, 0);
+    tone(980, 0.06, "sine", 0.018, 65);
+  }
+
+  function playDeleteSound() {
+    unlockAudio();
+    tone(240, 0.07, "sawtooth", 0.02, 0);
+    tone(180, 0.08, "sine", 0.018, 70);
+  }
+
+  function playReactSound() {
+    unlockAudio();
+    tone(540, 0.05, "sine", 0.02, 0);
+    tone(760, 0.06, "triangle", 0.018, 55);
+  }
+
+  function playChannelSound() {
+    unlockAudio();
+    tone(520, 0.04, "triangle", 0.02, 0);
+  }
+
+  function hashHue(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = ((h << 5) - h) + str.charCodeAt(i);
+    return Math.abs(h) % 360;
+  }
+
+  function avatarBg(name) {
+    const hue = hashHue(name || "?");
+    return `linear-gradient(135deg, hsl(${hue} 92% 62%), hsl(${(hue + 45) % 360} 92% 56%))`;
+  }
+
+  function initial(name) {
+    return (name || "?").trim().charAt(0).toUpperCase() || "?";
+  }
+
+  function displayNameFor(user) {
+    if (!user) return "anon";
+    return (user.displayName && user.displayName.trim()) ? user.displayName.trim() : (user.email ? user.email.split("@")[0] : "anon");
+  }
+
+  function timeLabel(ms) {
+    const d = new Date(ms || Date.now());
+    return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+
+  function typingDocId() {
+    if (!currentUser) return null;
+    return `${currentUser.uid}_${currentChannel}`;
+  }
+
+  function setChannelUI() {
+    channelBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.channel === currentChannel));
+    channelLabel.textContent = currentChannel;
+    msgInput.placeholder = `Message ${currentChannel}...`;
+    messagesEl.classList.add("fade-switch");
+    setTimeout(() => messagesEl.classList.remove("fade-switch"), 180);
+  }
+
+  function clearListeners() {
+    if (messagesUnsub) {
+      messagesUnsub();
+      messagesUnsub = null;
+    }
+    if (typingUnsub) {
+      typingUnsub();
+      typingUnsub = null;
+    }
+  }
+
+  function clearTypingStatus() {
+    if (!currentUser) return;
+    const id = typingDocId();
+    if (!id) return;
+    db.collection("typingStatus").doc(id).delete().catch(() => {});
+    clearTimeout(typingClearTimer);
+    clearTimeout(typingDebounce);
+  }
+
+  function beginCooldown(seconds = 5) {
+    canSend = false;
+    clearInterval(cooldownTimer);
+
+    let left = seconds;
+    sendBtn.disabled = true;
+    sendBtn.textContent = `Wait ${left}s`;
+
+    cooldownTimer = setInterval(() => {
+      left -= 1;
+      if (left <= 0) {
+        clearInterval(cooldownTimer);
+        cooldownTimer = null;
+        canSend = true;
+        sendBtn.disabled = false;
+        sendBtn.textContent = "Send";
+      } else {
+        sendBtn.textContent = `Wait ${left}s`;
+      }
+    }, 1000);
+  }
+
+  function renderEmptyState() {
+    messagesEl.innerHTML = `
+      <div class="empty-state">
+        <div style="font-size:20px;font-weight:800;letter-spacing:-0.03em;margin-bottom:6px;">No messages yet</div>
+        <div>Start the room in ${currentChannel}.</div>
+      </div>
+    `;
+  }
+
+  function makeButton(className, text, onclick) {
+    const btn = document.createElement("button");
+    btn.className = className;
+    btn.type = "button";
+    btn.textContent = text;
+    btn.addEventListener("click", onclick);
+    return btn;
+  }
+
+  function renderMessage(id, data) {
+    const msg = document.createElement("div");
+    msg.className = "msg";
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = initial(data.name);
+    avatar.style.background = avatarBg(data.name);
+
+    const body = document.createElement("div");
+    body.className = "msg-body";
+
+    const top = document.createElement("div");
+    top.className = "msg-top";
+
+    const name = document.createElement("div");
+    name.className = "msg-name";
+    name.textContent = data.name || "anon";
+
+    const time = document.createElement("div");
+    time.className = "msg-time";
+    time.textContent = timeLabel(data.time);
+
+    top.appendChild(name);
+    top.appendChild(time);
+
+    const text = document.createElement("div");
+    text.className = "msg-text";
+    text.textContent = data.text || "";
+
+    const actions = document.createElement("div");
+    actions.className = "msg-actions";
+
+    const reactions = data.reactions || {};
+    const likeCount = reactions.like || 0;
+    const fireCount = reactions.fire || 0;
+    const laughCount = reactions.laugh || 0;
+
+    const likeBtn = makeButton(
+      `reaction-btn ${likeCount ? "active" : ""}`,
+      `👍 ${likeCount}`,
+      () => react(id, "like")
+    );
+
+    const fireBtn = makeButton(
+      `reaction-btn ${fireCount ? "active" : ""}`,
+      `🔥 ${fireCount}`,
+      () => react(id, "fire")
+    );
+
+    const laughBtn = makeButton(
+      `reaction-btn ${laughCount ? "active" : ""}`,
+      `😂 ${laughCount}`,
+      () => react(id, "laugh")
+    );
+
+    actions.appendChild(likeBtn);
+    actions.appendChild(fireBtn);
+    actions.appendChild(laughBtn);
+
+    if (currentUser && data.uid === currentUser.uid) {
+      const delBtn = makeButton("delete-btn", "Delete", () => del(id));
+      actions.appendChild(delBtn);
+    }
+
+    body.appendChild(top);
+    body.appendChild(text);
+    body.appendChild(actions);
+
+    msg.appendChild(avatar);
+    msg.appendChild(body);
+
+    messagesEl.appendChild(msg);
+  }
+
+  function listenMessages() {
+    if (!currentUser) return;
+    if (messagesUnsub) messagesUnsub();
+
+    messagesEl.innerHTML = "";
+    messagesUnsub = db.collection("messages")
+      .where("channel", "==", currentChannel)
+      .onSnapshot((snap) => {
+        const docs = snap.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .sort((a, b) => (a.time || 0) - (b.time || 0));
+
+        messagesEl.innerHTML = "";
+
+        if (!docs.length) {
+          renderEmptyState();
+          return;
+        }
+
+        docs.forEach(doc => renderMessage(doc.id, doc));
+        requestAnimationFrame(() => {
+          messagesEl.scrollTop = messagesEl.scrollHeight;
+        });
+      }, (err) => {
+        messagesEl.innerHTML = "";
+        const errBox = document.createElement("div");
+        errBox.className = "empty-state";
+        errBox.textContent = err.message || "Could not load messages.";
+        messagesEl.appendChild(errBox);
       });
+  }
 
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    });
+  function listenTyping() {
+    if (!currentUser) return;
+    if (typingUnsub) typingUnsub();
 
-  // 📤 send message
-  function sendMessage() {
-    const name = document.getElementById("nickname").value || "anon";
-    const text = document.getElementById("message").value;
+    typingUnsub = db.collection("typingStatus")
+      .where("channel", "==", currentChannel)
+      .onSnapshot((snap) => {
+        const now = Date.now();
+        const names = [];
 
+        snap.docs.forEach(doc => {
+          const d = doc.data() || {};
+          const ts = d.updatedAt || 0;
+          if (d.uid === currentUser.uid) return;
+          if (now - ts < 4000) {
+            names.push(d.name || "someone");
+          } else {
+            db.collection("typingStatus").doc(doc.id).delete().catch(() => {});
+          }
+        });
+
+        if (!names.length) {
+          typingEl.textContent = "";
+          typingEl.classList.remove("show");
+          return;
+        }
+
+        if (names.length === 1) {
+          typingEl.textContent = `${names[0]} is typing…`;
+        } else {
+          typingEl.textContent = `${names[0]} and ${names.length - 1} others are typing…`;
+        }
+        typingEl.classList.add("show");
+      });
+  }
+
+  async function signup() {
+    unlockAudio();
+    const username = usernameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!username || !email || !password) {
+      alert("Fill in username, email, and password.");
+      return;
+    }
+
+    try {
+      const cred = await auth.createUserWithEmailAndPassword(email, password);
+      await cred.user.updateProfile({ displayName: username });
+      await cred.user.reload();
+      playLoginSound();
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  async function login() {
+    unlockAudio();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+      alert("Fill in email and password.");
+      return;
+    }
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      playLoginSound();
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  async function logout() {
+    unlockAudio();
+    clearTypingStatus();
+    await auth.signOut();
+  }
+
+  function switchChannel(channel) {
+    if (channel === currentChannel) return;
+    unlockAudio();
+    playChannelSound();
+    clearTypingStatus();
+    currentChannel = channel;
+    setChannelUI();
+    if (currentUser) {
+      listenMessages();
+      listenTyping();
+    }
+  }
+
+  async function send() {
+    unlockAudio();
+    if (!currentUser || !canSend) return;
+
+    const text = msgInput.value.trim();
     if (!text) return;
 
-    db.collection("messages").add({
-      name,
-      text,
-      time: Date.now()
-    });
+    try {
+      await db.collection("messages").add({
+        text,
+        uid: currentUser.uid,
+        name: displayNameFor(currentUser),
+        channel: currentChannel,
+        time: Date.now(),
+        reactions: { like: 0, fire: 0, laugh: 0 }
+      });
 
-    document.getElementById("message").value = "";
+      msgInput.value = "";
+      clearTypingStatus();
+      playSendSound();
+      beginCooldown(5);
+      msgInput.focus();
+    } catch (e) {
+      alert(e.message);
+    }
   }
+
+  async function del(id) {
+    unlockAudio();
+    try {
+      await db.collection("messages").doc(id).delete();
+      playDeleteSound();
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  async function react(id, key) {
+    unlockAudio();
+    try {
+      await db.collection("messages").doc(id).update({
+        [`reactions.${key}`]: FieldValue.increment(1)
+      });
+      playReactSound();
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  function updateTyping() {
+    if (!currentUser) return;
+    clearTimeout(typingDebounce);
+    typingDebounce = setTimeout(async () => {
+      try {
+        await db.collection("typingStatus").doc(typingDocId()).set({
+          uid: currentUser.uid,
+          name: displayNameFor(currentUser),
+          channel: currentChannel,
+          updatedAt: Date.now()
+        }, { merge: true });
+
+        clearTimeout(typingClearTimer);
+        typingClearTimer = setTimeout(clearTypingStatus, 1200);
+      } catch (_) {}
+    }, 120);
+  }
+
+  msgInput.addEventListener("input", updateTyping);
+
+  msgInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      send();
+    }
+  });
+
+  msgInput.addEventListener("blur", clearTypingStatus);
+
+  window.addEventListener("beforeunload", clearTypingStatus);
+
+  auth.onAuthStateChanged((u) => {
+    const firstTick = firstAuthTick;
+    firstAuthTick = false;
+
+    currentUser = u || null;
+
+    if (u) {
+      loginBox.classList.add("hidden");
+      appEl.style.display = "flex";
+
+      const name = displayNameFor(u);
+      userLabel.textContent = name;
+      miniAvatar.textContent = initial(name);
+      miniAvatar.style.background = avatarBg(name);
+      setChannelUI();
+
+      clearListeners();
+      listenMessages();
+      listenTyping();
+      msgInput.focus();
+
+      if (!firstTick) {
+        playLoginSound();
+      }
+    } else {
+      clearListeners();
+      clearTypingStatus();
+      loginBox.classList.remove("hidden");
+      appEl.style.display = "none";
+      userLabel.textContent = "Not logged in";
+      miniAvatar.textContent = "?";
+      miniAvatar.style.background = "linear-gradient(135deg, #666, #999)";
+      messagesEl.innerHTML = "";
+      typingEl.textContent = "";
+      typingEl.classList.remove("show");
+    }
+  });
+
+  document.querySelectorAll(".channel-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      switchChannel(btn.dataset.channel);
+    });
+  });
+
+  /* ---------- CINEMATIC BACKGROUND ---------- */
+  const bg = document.getElementById("bg");
+  const pCanvas = document.getElementById("particles");
+  const bgCtx = bg.getContext("2d");
+  const pCtx = pCanvas.getContext("2d");
+
+  function resizeCanvases() {
+    bg.width = window.innerWidth;
+    bg.height = window.innerHeight;
+    pCanvas.width = window.innerWidth;
+    pCanvas.height = window.innerHeight;
+  }
+
+  resizeCanvases();
+  window.addEventListener("resize", resizeCanvases);
+
+  const glows = Array.from({ length: 28 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: 120 + Math.random() * 220,
+    vx: (Math.random() - 0.5) * 0.25,
+    vy: (Math.random() - 0.5) * 0.25,
+    drift: Math.random() * 1000,
+    driftSpeed: 0.00008 + Math.random() * 0.00014,
+    color: [
+      [109, 140, 255],
+      [141, 109, 255],
+      [54, 214, 255]
+    ][Math.floor(Math.random() * 3)],
+    alpha: 0.11 + Math.random() * 0.13
+  }));
+
+  const stars = Array.from({ length: 90 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 1.4 + 0.2,
+    v: 0.06 + Math.random() * 0.18
+  }));
+
+  const particles = Array.from({ length: 58 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.22,
+    vy: (Math.random() - 0.5) * 0.22,
+    r: 0.8 + Math.random() * 1.7
+  }));
+
+  let mouseX = 0;
+  let mouseY = 0;
+
+  document.addEventListener("mousemove", (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5);
+    mouseY = (e.clientY / window.innerHeight - 0.5);
+    document.documentElement.style.setProperty("--mx", mouseX.toFixed(4));
+    document.documentElement.style.setProperty("--my", mouseY.toFixed(4));
+  });
+
+  function drawNebula() {
+    bgCtx.clearRect(0, 0, bg.width, bg.height);
+    bgCtx.globalCompositeOperation = "lighter";
+
+    const t = Date.now();
+
+    bgCtx.fillStyle = "#05060a";
+    bgCtx.fillRect(0, 0, bg.width, bg.height);
+
+    for (const s of stars) {
+      bgCtx.fillStyle = "rgba(255,255,255,0.85)";
+      bgCtx.beginPath();
+      bgCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      bgCtx.fill();
+
+      s.y += s.v;
+      s.x += Math.sin(t * 0.00005 + s.y * 0.01) * 0.05;
+      if (s.y > bg.height + 6) s.y = -6;
+      if (s.x < -6) s.x = bg.width + 6;
+      if (s.x > bg.width + 6) s.x = -6;
+    }
+
+    for (const g of glows) {
+      const wobbleX = Math.sin(t * g.driftSpeed + g.drift) * 22;
+      const wobbleY = Math.cos(t * g.driftSpeed * 0.9 + g.drift) * 22;
+
+      const x = g.x + wobbleX + mouseX * 48;
+      const y = g.y + wobbleY + mouseY * 48;
+
+      const grad = bgCtx.createRadialGradient(x, y, 0, x, y, g.r);
+      grad.addColorStop(0, `rgba(${g.color[0]}, ${g.color[1]}, ${g.color[2]}, ${g.alpha})`);
+      grad.addColorStop(0.35, `rgba(${g.color[0]}, ${g.color[1]}, ${g.color[2]}, ${g.alpha * 0.4})`);
+      grad.addColorStop(0.7, `rgba(${g.color[0]}, ${g.color[1]}, ${g.color[2]}, ${g.alpha * 0.12})`);
+      grad.addColorStop(1, "transparent");
+
+      bgCtx.fillStyle = grad;
+      bgCtx.beginPath();
+      bgCtx.arc(x, y, g.r, 0, Math.PI * 2);
+      bgCtx.fill();
+
+      g.x += g.vx;
+      g.y += g.vy;
+
+      if (g.x < -600) g.x = window.innerWidth + 600;
+      if (g.x > window.innerWidth + 600) g.x = -600;
+      if (g.y < -600) g.y = window.innerHeight + 600;
+      if (g.y > window.innerHeight + 600) g.y = -600;
+    }
+
+    requestAnimationFrame(drawNebula);
+  }
+
+  function drawParticles() {
+    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+
+    for (const p of particles) {
+      p.x += p.vx + mouseX * 0.02;
+      p.y += p.vy + mouseY * 0.02;
+
+      if (p.x < -20) p.x = pCanvas.width + 20;
+      if (p.x > pCanvas.width + 20) p.x = -20;
+      if (p.y < -20) p.y = pCanvas.height + 20;
+      if (p.y > pCanvas.height + 20) p.y = -20;
+    }
+
+    for (let i = 0; i < particles.length; i++) {
+      const a = particles[i];
+
+      pCtx.fillStyle = "rgba(255,255,255,0.38)";
+      pCtx.beginPath();
+      pCtx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+      pCtx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const b = particles[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 120) {
+          pCtx.strokeStyle = `rgba(110, 140, 255, ${(1 - dist / 120) * 0.10})`;
+          pCtx.lineWidth = 1;
+          pCtx.beginPath();
+          pCtx.moveTo(a.x, a.y);
+          pCtx.lineTo(b.x, b.y);
+          pCtx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(drawParticles);
+  }
+
+  drawNebula();
+  drawParticles();
 </script>
 
 </body>
