@@ -3,43 +3,131 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tommy</title>
+<title>Tommy | The Hypnotists</title>
 
 <link rel="icon" href="hotsmp.ico">
 <link rel="stylesheet" href="style.css">
+
+<style>
+  body {
+    margin: 0;
+    color: white;
+    background: black;
+    font-family: Inter, Arial, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* BACK BUTTON */
+  .back {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    text-decoration: none;
+
+    color: white;
+    padding: 10px 16px;
+    border-radius: 999px;
+
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    transition: 0.2s ease;
+  }
+
+  .back:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.10);
+  }
+
+  /* PAGE WRAPPER */
+  .character-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+  }
+
+  /* GLASS CARD */
+  .content {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    max-width: 900px;
+
+    padding: 30px;
+    border-radius: 26px;
+
+    background: rgba(10,10,10,0.72);
+    border: 1px solid rgba(255,255,255,0.14);
+
+    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .content img {
+    width: 240px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  h3 {
+    margin: 0 0 10px;
+    font-size: 2rem;
+  }
+
+  p {
+    color: rgba(255,255,255,0.75);
+    line-height: 1.7;
+    max-width: 420px;
+  }
+
+  /* MOBILE */
+  @media (max-width: 800px) {
+    .content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .content img {
+      width: 80%;
+      height: auto;
+    }
+  }
+</style>
+
 </head>
 
 <body>
 
-<!-- 🌌 SAME GALAXY BACKGROUND -->
+<!-- 🌌 YOUR EXISTING BACKGROUND -->
 <canvas id="bg"></canvas>
 <canvas id="stars"></canvas>
 <canvas id="particles"></canvas>
 
 <!-- 🔙 BACK BUTTON -->
-<div style="padding:40px;">
-  <a href="index.html" style="
-    color:#8fe9ff;
-    text-decoration:none;
-    font-weight:600;
-    border:1px solid rgba(143,233,255,0.25);
-    padding:10px 18px;
-    border-radius:999px;
-    background:rgba(255,255,255,0.04);
-  ">← Back</a>
-</div>
+<a class="back" href="index.html">← Back</a>
 
 <!-- 👤 CHARACTER CONTENT -->
 <div class="character-page">
 
   <div class="content">
 
-    <img src="tommy.png" alt="tommy">
+    <img src="tommy.png" alt="Tommy">
 
     <div>
       <h3>Tommy</h3>
       <p>
-       A friend to the mastermind behind this operation.
+        A friend connected to the main group involved in the hypnosis experiments.
+        Tommy plays a supporting role in the unfolding events of The Hypnotists,
+        helping shape the group dynamic and the tension between trust and control.
       </p>
     </div>
 
