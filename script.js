@@ -8,12 +8,13 @@
   let currentX = 0;
   let currentY = 0;
 
-  window.addEventListener("mousemove", (e) => {
-    const nx = (e.clientX / window.innerWidth - 0.5) * 18;
-    const ny = (e.clientY / window.innerHeight - 0.5) * 18;
-    targetX = nx;
-    targetY = ny;
-  });
+ window.addEventListener("mousemove", (e) => {
+  const nx = (e.clientX / window.innerWidth - 0.5) * 10;
+  const ny = (e.clientY / window.innerHeight - 0.5) * 10;
+
+  targetX = nx;
+  targetY = ny;
+});
 
   function animate() {
     currentX += (targetX - currentX) * 0.06;
