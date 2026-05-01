@@ -207,9 +207,6 @@ a {
   }
 }
 html, body {
-  overflow-y: overlay;
-  scrollbar-gutter: stable;
-}
-body {
-  overscroll-behavior: none;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
