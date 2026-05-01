@@ -2,1507 +2,755 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Hypnotists</title>
-  <meta name="description" content="A cinematic, info-packed presentation page for The Hypnotists by Gordon Korman." />
-  <link rel="icon" href="hotsmp.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="A cinematic landing page for the book The Hypnotists with character cards, analysis, reviews, and frosted glass design." />
+
+  <!-- Your existing background styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    :root {
+      --bg: rgba(8, 10, 18, 0.45);
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-strong: rgba(255, 255, 255, 0.12);
+      --line: rgba(255, 255, 255, 0.16);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.68);
+      --muted-2: rgba(255, 255, 255, 0.52);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      overflow-x: hidden;
+      background: transparent;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    .page-shell {
+      position: relative;
+      min-height: 100vh;
+      transform: translate3d(0, 0, 0);
+      transition: transform 120ms linear;
+    }
+
+    .top-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.12), transparent 28%),
+        radial-gradient(circle at 20% 20%, rgba(120,140,255,0.10), transparent 24%),
+        radial-gradient(circle at 80% 15%, rgba(255,255,255,0.08), transparent 22%);
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding-bottom: 90px;
+    }
+
+    .hero {
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 0 40px;
+    }
+
+    .hero-inner {
+      width: min(920px, 100%);
+      padding: 44px 30px 34px;
+      border-radius: 34px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      line-height: 0.96;
+      margin: 0;
+      letter-spacing: 0.02em;
+      text-wrap: balance;
+      text-shadow: 0 0 24px rgba(255,255,255,0.10);
+    }
+
+    .subtitle {
+      margin: 18px auto 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      margin-top: 26px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+      cursor: pointer;
+      font-size: 0.96rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.24);
+    }
+
+    .scroll-hint {
+      margin-top: 18px;
+      color: var(--muted-2);
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .section {
+      margin: 24px 0;
+      padding: 28px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transform: translateY(18px);
+      opacity: 0;
+      transition: opacity 700ms ease, transform 700ms ease, box-shadow 220ms ease;
+    }
+
+    .section.reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section:hover {
+      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      letter-spacing: 0.01em;
+    }
+
+    .section p,
+    .section li {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .section ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      padding: 18px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .stat .label {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted-2);
+      margin-bottom: 10px;
+    }
+
+    .stat .value {
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .reviews {
+      margin-top: 24px;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .review {
+      position: relative;
+      padding: 22px 20px 18px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 16px 42px rgba(0,0,0,0.26);
+      transform: perspective(1000px) rotateX(6deg);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+      min-height: 170px;
+      overflow: hidden;
+    }
+
+    .review::before {
+      content: "“";
+      position: absolute;
+      top: -14px;
+      left: 14px;
+      font-size: 5rem;
+      color: rgba(255,255,255,0.10);
+      line-height: 1;
+    }
+
+    .review:hover {
+      transform: perspective(1000px) rotateX(0deg) translateY(-4px);
+      box-shadow: 0 22px 54px rgba(0,0,0,0.35);
+    }
+
+    .review .quote {
+      position: relative;
+      z-index: 1;
+      font-size: 0.98rem;
+      line-height: 1.75;
+      color: var(--text);
+      margin: 0 0 16px;
+    }
+
+    .review .source {
+      color: var(--muted-2);
+      font-size: 0.83rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .why-read {
+      display: grid;
+      gap: 14px;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .characters {
+      margin-top: 42px;
+      padding-top: 6px;
+    }
+
+    .characters-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .characters-head h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+    }
+
+    .characters-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      text-decoration: none;
+      color: white;
+      border-radius: 22px;
+      overflow: hidden;
+      min-height: 360px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 18px 42px rgba(0,0,0,0.28);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+      transform-style: preserve-3d;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 26px 60px rgba(0,0,0,0.42);
+      border-color: rgba(255,255,255,0.22);
+    }
+
+    .card img {
+      width: 100%;
+      height: 290px;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.05) contrast(1.02);
+    }
+
+    .card-content {
+      padding: 16px 16px 18px;
+      background: linear-gradient(180deg, rgba(10,12,18,0.22), rgba(10,12,18,0.46));
+    }
+
+    .card h3 {
+      margin: 0 0 7px;
+      font-size: 1.2rem;
+      letter-spacing: 0.02em;
+    }
+
+    .card span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .floating-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.34);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #intro {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.10), rgba(0,0,0,0.96) 55%),
+        rgba(0,0,0,0.98);
+      animation: introFadeOut 2.5s ease forwards 2.1s;
+    }
+
+    .intro-text {
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      letter-spacing: 0.32em;
+      text-indent: 0.32em;
+      opacity: 0;
+      transform: translateY(10px) scale(1.04);
+      animation: introText 1.4s ease forwards;
+      text-align: center;
+    }
+
+    @keyframes introText {
+      0% { opacity: 0; transform: translateY(14px) scale(1.05); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes introFadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    #audioToggle {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 1000;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.28);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 180ms ease, background 180ms ease;
+    }
+
+    #audioToggle:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .glitch-hover:hover {
+      animation: glitch 260ms steps(2, end) infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(1px, -1px); }
+      40% { transform: translate(-1px, 1px); }
+      60% { transform: translate(1px, 1px); }
+      80% { transform: translate(-1px, -1px); }
+      100% { transform: translate(0); }
+    }
+
+    @media (max-width: 900px) {
+      .grid-2,
+      .review-grid,
+      .card-container,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 56px;
+      }
+
+      .hero-inner {
+        padding: 34px 20px 24px;
+      }
+
+      .section {
+        padding: 22px;
+      }
+
+      .card {
+        min-height: 330px;
+      }
+
+      .card img {
+        height: 260px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <canvas id="bg" aria-hidden="true"></canvas>
-  <canvas id="stars" aria-hidden="true"></canvas>
-  <canvas id="particles" aria-hidden="true"></canvas>
+  <!-- intro -->
+  <div id="intro" aria-hidden="true">
+    <div class="intro-text">THE HYPNOTISTS</div>
+  </div>
 
-  <main class="page-shell">
-    <section class="hero hero-glass">
-      <div class="hero-badge">Cinematic Book Feature</div>
-      <h1>The Hypnotists</h1>
-      <p class="hero-subtitle">Gordon Korman • Mind control, loyalty, and the cost of power</p>
-      <p class="hero-copy">
-        A sleek presentation for a story where one strange power changes everything.
-        This version is designed to feel polished, dramatic, and packed with useful information.
-      </p>
+  <div class="page-shell" id="pageShell">
+    <div class="top-glow"></div>
 
-      <div class="hero-actions">
-        <button class="hero-button" onclick="document.getElementById('overview').scrollIntoView({behavior:'smooth'})">Enter</button>
-        <button class="hero-button secondary" onclick="document.getElementById('why-read').scrollIntoView({behavior:'smooth'})">Why Read It</button>
-      </div>
-
-      <div class="hero-meta">
-        <div class="meta-pill">Suspense</div>
-        <div class="meta-pill">Psychological tension</div>
-        <div class="meta-pill">Friendship under pressure</div>
-        <div class="meta-pill">Power and responsibility</div>
-      </div>
-    </section>
-
-    <section class="section section-overview" id="overview">
-      <div class="section-header">
-        <h2>Overview</h2>
-        <p>What the story is about, why it matters, and why the premise grabs attention immediately.</p>
-      </div>
-
-      <div class="overview-grid">
-        <div class="overview-lead glass-card">
-          <div class="card-kicker">Story Snapshot</div>
-          <p>
-            <strong>The Hypnotists</strong> centers on a powerful idea: what happens when the mind itself becomes the battleground?
-            The book follows young characters caught between discovery, secrecy, and pressure as hypnotic control reshapes the world around them.
+    <main class="content">
+      <section class="hero">
+        <div class="hero-inner reveal-on-load">
+          <div class="eyebrow">Book Page • Character Guide • Analysis</div>
+          <h1 class="title glitch-hover">The Hypnotists</h1>
+          <p class="subtitle">
+            A cinematic, mind-bending look at control, identity, and the thin line between choice and influence.
           </p>
+
+          <div class="hero-actions">
+            <a class="btn" href="#analysis">Book Analysis</a>
+            <a class="btn" href="#characters">Character Cards</a>
+            <button class="btn" id="ambientBtn" type="button">Ambient Sound</button>
+          </div>
+
+          <div class="scroll-hint">Scroll down to explore</div>
+        </div>
+      </section>
+
+      <section id="analysis" class="section reveal-on-scroll">
+        <h2>Book Analysis</h2>
+        <p>
+          <strong>The Hypnotists</strong> explores the tension between free will and manipulation.
+          Through hypnosis, secrecy, and psychological pressure, the story keeps asking the reader
+          one central question: who is really in control? The mystery works because it is not just about
+          action or suspense, but about perception itself.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <span class="label">Theme</span>
+            <div class="value">Control vs. freedom</div>
+          </div>
+          <div class="stat">
+            <span class="label">Mood</span>
+            <div class="value">Suspenseful, intense, clever</div>
+          </div>
+          <div class="stat">
+            <span class="label">Conflict</span>
+            <div class="value">Truth hidden beneath influence</div>
+          </div>
+          <div class="stat">
+            <span class="label">Style</span>
+            <div class="value">Fast-paced psychological thriller</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <section class="section reveal-on-scroll">
+          <h2>Why You Should Read It</h2>
+          <div class="why-read">
+            <p>
+              The book combines mystery, tension, and mind games in a way that keeps the reader moving.
+              It is the kind of story that makes you keep reading because every chapter adds another layer.
+            </p>
+            <div class="pill-list" aria-label="Reasons to read">
+              <span class="pill">Fast pacing</span>
+              <span class="pill">Psychological tension</span>
+              <span class="pill">Strong twists</span>
+              <span class="pill">Memorable characters</span>
+              <span class="pill">Suspenseful atmosphere</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section reveal-on-scroll">
+          <h2>What Makes It Stand Out</h2>
           <p>
-            The result is a fast-moving story that blends mystery, science-fiction energy, and emotional stakes.
-            It feels exciting on the surface, but the deeper draw is the way it asks readers to think about choice, trust, and identity.
+            The story stands out because the danger is often invisible. Instead of relying only on obvious action,
+            it builds unease through uncertainty, making the reader question motives, memory, and trust.
           </p>
-        </div>
+          <ul>
+            <li>Creates suspense through hidden control</li>
+            <li>Makes the reader second-guess what is real</li>
+            <li>Builds emotional pressure through character choices</li>
+          </ul>
+        </section>
+      </section>
 
-        <div class="feature-panel glass-card">
-          <div class="card-kicker">Book at a Glance</div>
-
-        <div class="feature-item">
-          <span class="feature-label">Genre</span>
-          <span class="feature-value">Thriller / Sci-fi / Adventure</span>
-        </div>
-        <div class="feature-item">
-          <span class="feature-label">Main Conflict</span>
-          <span class="feature-value">Control vs. freedom</span>
-        </div>
-        <div class="feature-item">
-          <span class="feature-label">Tone</span>
-          <span class="feature-value">Suspenseful and cinematic</span>
-        </div>
-        <div class="feature-item">
-          <span class="feature-label">Big Theme</span>
-          <span class="feature-value">Power has consequences</span>
-        </div>
-        <div class="feature-item">
-          <span class="feature-label">Best For</span>
-          <span class="feature-value">Discussion, analysis, and visual projects</span>
-        </div>
-        <div class="feature-item">
-          <span class="feature-label">Reading Feel</span>
-          <span class="feature-value">Fast, tense, and thoughtful</span>
-        </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-timeline" id="story">
-      <div class="section-header">
-        <h2>Story Momentum</h2>
-        <p>A clean, scroll-friendly guide to the story’s emotional and dramatic movement.</p>
-      </div>
-
-      <div class="timeline-grid">
-
-        <div class="timeline-item">
-          <div class="timeline-number">01</div>
-          <div class="timeline-copy">
-            <h3>Opening spark</h3>
-            <p>The story begins with curiosity and a strange sense that something larger is happening under the surface.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-number">02</div>
-          <div class="timeline-copy">
-            <h3>Discovery</h3>
-            <p>The central power becomes more than a rumor, and the characters start realizing the situation is real.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-number">03</div>
-          <div class="timeline-copy">
-            <h3>Pressure</h3>
-            <p>As the stakes rise, secrets matter more and trust becomes harder to protect.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-number">04</div>
-          <div class="timeline-copy">
-            <h3>Escalation</h3>
-            <p>The conflict expands beyond a single moment and starts affecting the group emotionally and strategically.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-number">05</div>
-          <div class="timeline-copy">
-            <h3>Choice</h3>
-            <p>The characters have to decide what kind of people they are going to be under pressure.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-number">06</div>
-          <div class="timeline-copy">
-            <h3>Aftermath</h3>
-            <p>The story leaves the reader with a bigger idea: power matters, but responsibility matters more.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-characters" id="characters">
-      <div class="section-header">
-        <h2>Characters</h2>
-        <p>Expanded character cards with more depth, more context, and more visual weight.</p>
-      </div>
-
-      <div class="card-grid characters-grid">
-
-        <a class="character-card glass-card reveal" href="jax.html">
-          <div class="character-index">01</div>
-          <div class="character-name">Jax Opus</div>
-          <div class="character-role">The central perspective character whose discoveries push the story into motion.</div>
-          <p class="character-traits"><strong>Traits:</strong> Curious, reactive, and pulled toward the strange pull of hypnosis.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> He gives the story its emotional center and sense of danger.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-        <a class="character-card glass-card reveal" href="elias.html">
-          <div class="character-index">02</div>
-          <div class="character-name">Dr. Elias Mako</div>
-          <div class="character-role">A scientist whose work turns the abstract into something unsettlingly real.</div>
-          <p class="character-traits"><strong>Traits:</strong> Precise, controlled, and willing to cross lines in the name of progress.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> He embodies the book’s fear of ambition without restraint.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-        <a class="character-card glass-card reveal" href="tommy.html">
-          <div class="character-index">03</div>
-          <div class="character-name">Tommy</div>
-          <div class="character-role">A loyal friend who helps ground the story when everything begins to blur.</div>
-          <p class="character-traits"><strong>Traits:</strong> Steady, supportive, and often the first to notice when something is wrong.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> He keeps the story human when events become extreme.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-        <a class="character-card glass-card reveal" href="the-hypnotic-circle.html">
-          <div class="character-index">04</div>
-          <div class="character-name">The Hypnotic Circle</div>
-          <div class="character-role">Not a single person, but the group energy that surrounds the book’s central tension.</div>
-          <p class="character-traits"><strong>Traits:</strong> Secretive, calculated, and always one step ahead of the kids.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> It raises the stakes and keeps the pacing sharp.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-        <a class="character-card glass-card reveal" href="supporting-friends.html">
-          <div class="character-index">05</div>
-          <div class="character-name">Supporting Friends</div>
-          <div class="character-role">Characters who reveal how pressure affects trust, loyalty, and decision-making.</div>
-          <p class="character-traits"><strong>Traits:</strong> Varies by scene, but each one adds a different emotional angle.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> They widen the story beyond the main conflict.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-        <a class="character-card glass-card reveal" href="authority-figures.html">
-          <div class="character-index">06</div>
-          <div class="character-name">Authority Figures</div>
-          <div class="character-role">Adults who feel close enough to help, but far enough to miss the full truth.</div>
-          <p class="character-traits"><strong>Traits:</strong> Practical, cautious, and often limited by what they can see.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> They create friction between safety and freedom.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-        <a class="character-card glass-card reveal" href="opposing-voices.html">
-          <div class="character-index">07</div>
-          <div class="character-name">Opposing Voices</div>
-          <div class="character-role">People who challenge the kids and force the central conflict into the open.</div>
-          <p class="character-traits"><strong>Traits:</strong> Suspicious, strategic, and sometimes unreadable.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> They sharpen the suspense and complicate every choice.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-        <a class="character-card glass-card reveal" href="inner-doubt.html">
-          <div class="character-index">08</div>
-          <div class="character-name">Inner Doubt</div>
-          <div class="character-role">A character-like force that appears whenever control starts slipping away.</div>
-          <p class="character-traits"><strong>Traits:</strong> Silent at first, then impossible to ignore.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> It deepens the psychological side of the book.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-        <a class="character-card glass-card reveal" href="the-witness.html">
-          <div class="character-index">09</div>
-          <div class="character-name">The Witness</div>
-          <div class="character-role">Someone who observes more than they speak and notices details others miss.</div>
-          <p class="character-traits"><strong>Traits:</strong> Quiet, observant, and difficult to pin down.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> This role helps the plot feel layered and cinematic.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-        <a class="character-card glass-card reveal" href="the-lost-version.html">
-          <div class="character-index">010</div>
-          <div class="character-name">The Lost Version</div>
-          <div class="character-role">A symbolic presence representing what the characters almost become.</div>
-          <p class="character-traits"><strong>Traits:</strong> Fragmented, uneasy, and full of uncertainty.</p>
-          <p class="character-meaning"><strong>Why they matter:</strong> It reinforces the book’s bigger questions about identity.</p>
-          <div class="character-arrow">Explore →</div>
-        </a>
-      </div>
-    </section>
-
-    <section class="section section-analysis" id="analysis">
-      <div class="section-header">
-        <h2>Analysis</h2>
-        <p>A deeper look at why the book is good, written in a way that sounds polished and confident.</p>
-      </div>
-
-      <div class="analysis-grid">
-
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Control and Freedom</div>
-          <p>The story works because every major event circles back to one question: what happens when one person can influence another’s mind? That tension never really goes away.</p>
-          <p>It gives the plot a strong engine and a clear moral pressure.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Trust Under Pressure</div>
-          <p>The characters cannot rely on appearances alone. As the situation gets stranger, trust becomes a resource just as valuable as any power.</p>
-          <p>That creates constant suspense.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">The Cost of Power</div>
-          <p>The book suggests that power is never just exciting; it also changes the person holding it. The more control someone gains, the more responsibility they carry.</p>
-          <p>This makes the conflict feel larger than a simple adventure.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Pacing</div>
-          <p>Scenes move quickly, but the story still leaves room for emotional reactions. That balance keeps the reading experience cinematic without becoming confusing.</p>
-          <p>Fast pacing supports the thriller tone.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Psychological Tension</div>
-          <p>The most interesting pressure in the book is not physical. It is mental. Characters are forced to question what is real, what is chosen, and what is influenced.</p>
-          <p>That makes the story memorable.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Moral Gray Areas</div>
-          <p>The book does not reduce every character to good or bad. Instead, it lets motives stay complicated, which makes the world feel more believable.</p>
-          <p>Complex motives make the story richer.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">The Role of Secrecy</div>
-          <p>Secrets drive the plot forward and shape how each character behaves. When information is hidden, every interaction feels more important.</p>
-          <p>Secrecy keeps the reader engaged.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Identity</div>
-          <p>One of the strongest themes is the fear of losing yourself. When minds can be altered, the question of identity becomes urgent.</p>
-          <p>This theme adds emotional depth.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Science and Ethics</div>
-          <p>The story uses experimentation as more than background detail. It turns science into a moral question about what should and should not be done.</p>
-          <p>That gives the plot real weight.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Suspense Through Uncertainty</div>
-          <p>The best suspense does not just come from danger. It comes from not knowing who can be trusted or what is about to happen next.</p>
-          <p>Uncertainty keeps the pages moving.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Youth and Vulnerability</div>
-          <p>Because the main characters are young, the stakes feel sharper. They are capable, but still vulnerable to forces they do not fully understand.</p>
-          <p>That contrast makes readers care.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Emotional Stakes</div>
-          <p>Even when the story is thrilling, it never forgets how events affect people personally. Fear, loyalty, and confusion all matter here.</p>
-          <p>The emotional layer keeps the story grounded.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Power Imbalance</div>
-          <p>The book is especially effective when it shows how uneven control can be between people. One person knowing more than another is enough to create danger.</p>
-          <p>This imbalance drives tension.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">The Unknown</div>
-          <p>The unknown is treated almost like a character. It hovers over every scene and makes the world feel larger than what is immediately visible.</p>
-          <p>That gives the story atmosphere.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Consequences</div>
-          <p>Actions matter in this book. Choices ripple outward, and the story does not pretend that risky decisions can be undone easily.</p>
-          <p>Consequences make the narrative feel real.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Tone</div>
-          <p>The tone is serious, sleek, and suspenseful, with just enough emotion to keep the story from feeling cold.</p>
-          <p>It matches the cinematic presentation well.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Dialogue</div>
-          <p>Conversations carry tension because people are often not saying everything they know. That hidden meaning gives the dialogue extra force.</p>
-          <p>Subtext matters here.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Character Growth</div>
-          <p>The characters do not stay in the same place emotionally. Pressure changes how they think, what they value, and how they react.</p>
-          <p>Growth makes the story satisfying.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Visual Imagination</div>
-          <p>The setting and action are easy to picture, which is part of why the story feels so adaptable to a cinematic design.</p>
-          <p>Clear visuals support engagement.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Why It Stands Out</div>
-          <p>The book stands out because it mixes sci-fi style intrigue with emotional realism. It is not just about a cool idea; it is about what the idea does to people.</p>
-          <p>That blend makes it effective.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Pressure Cooker Structure</div>
-          <p>Every chapter feels like it adds pressure rather than simply adding events. That structure keeps the tension rising.</p>
-          <p>The story rarely relaxes for too long.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Small Details Matter</div>
-          <p>The book rewards close attention because tiny choices can matter later. This gives the reading experience a sense of momentum and payoff.</p>
-          <p>Details help the plot feel designed.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Reader Curiosity</div>
-          <p>A good mystery keeps asking the reader to lean in. This one does that by constantly opening new questions before old ones are fully answered.</p>
-          <p>Curiosity becomes the hook.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">Balance of Scale</div>
-          <p>The story feels both personal and big-picture at the same time. It works on the level of a few characters, but the ideas reach much farther.</p>
-          <p>That balance gives it depth.</p>
-        </article>
-        <article class="glass-card analysis-card">
-          <div class="card-kicker">The Final Effect</div>
-          <p>By the end, the book leaves readers thinking less about the technique of hypnosis and more about the human cost behind control.</p>
-          <p>That is what makes the book resonate.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section section-review-wall" id="reviews">
-      <div class="section-header">
-        <h2>Review Wall</h2>
-        <p>Floating, 3D-style quote cards inspired by premium bestseller blurbs. These are presentation-style lines, not real published reviews.</p>
-      </div>
-
-      <div class="review-grid">
-
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">New York Times style blurb</div>
-          <blockquote class="review-quote">“A sleek, high-tension page-turner with real psychological bite.”</blockquote>
-          <p class="review-note">The review strip is short, bold, and built to feel premium.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Best-Seller Shelf</div>
-          <blockquote class="review-quote">“The premise is irresistible, and the execution keeps the pressure rising.”</blockquote>
-          <p class="review-note">A polished quote card for the hero section.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Cinematic Reads</div>
-          <blockquote class="review-quote">“A smart thriller that moves like a movie and lingers like a question.”</blockquote>
-          <p class="review-note">Useful for a dramatic floating quote wall.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Literary Pulse</div>
-          <blockquote class="review-quote">“The concept is sharp, but what stays with you is the emotional cost.”</blockquote>
-          <p class="review-note">Designed to feel reflective and serious.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Prestige Fiction Weekly</div>
-          <blockquote class="review-quote">“Fast, stylish, and thoughtful without losing its sense of danger.”</blockquote>
-          <p class="review-note">Good for a frosted glass card.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Shelf Impact</div>
-          <blockquote class="review-quote">“It does not just tell a story; it builds a mood around every page.”</blockquote>
-          <p class="review-note">A quote that reinforces atmosphere.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">The Midnight Review</div>
-          <blockquote class="review-quote">“This is the kind of book that makes control feel terrifying and personal.”</blockquote>
-          <p class="review-note">Strong for a darker accent card.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Bestseller Spotlight</div>
-          <blockquote class="review-quote">“Unique, readable, and packed with tension from start to finish.”</blockquote>
-          <p class="review-note">Short enough for easy scanning.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Page to Screen</div>
-          <blockquote class="review-quote">“Visually vivid and structurally tight, with a hook that refuses to let go.”</blockquote>
-          <p class="review-note">Works well in a cinematic layout.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">The Paper Crown</div>
-          <blockquote class="review-quote">“A smart blend of sci-fi intrigue and emotional stakes.”</blockquote>
-          <p class="review-note">Good balance of genre and meaning.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Readers First</div>
-          <blockquote class="review-quote">“It turns an unusual idea into a story with real momentum.”</blockquote>
-          <p class="review-note">Great for a confidence-building quote.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Prime Shelf</div>
-          <blockquote class="review-quote">“Every chapter feels like it is pulling the reader closer to the edge.”</blockquote>
-          <p class="review-note">Supports the thriller feel.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Highline Books</div>
-          <blockquote class="review-quote">“The book has a clean, modern energy and a strong sense of purpose.”</blockquote>
-          <p class="review-note">A modern review voice.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">North Star Review</div>
-          <blockquote class="review-quote">“A gripping concept backed by tension, atmosphere, and clear stakes.”</blockquote>
-          <p class="review-note">Makes the page feel curated.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">The Bestseller Note</div>
-          <blockquote class="review-quote">“The story is easy to enter, but hard to forget.”</blockquote>
-          <p class="review-note">A clean closing quote card.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Ink & Impact</div>
-          <blockquote class="review-quote">“It earns attention because the idea matters and the execution delivers.”</blockquote>
-          <p class="review-note">Good for a highlighted card.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Critical Glow</div>
-          <blockquote class="review-quote">“A moody, intelligent read that knows how to keep the reader uneasy.”</blockquote>
-          <p class="review-note">Great for motion effects.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Chapterline</div>
-          <blockquote class="review-quote">“Thoughtful enough for analysis, exciting enough for pure enjoyment.”</blockquote>
-          <p class="review-note">Strong for a classroom project.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">The Review Deck</div>
-          <blockquote class="review-quote">“A compelling example of how suspense and meaning can work together.”</blockquote>
-          <p class="review-note">Useful in the lower review row.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Edge of Shelf</div>
-          <blockquote class="review-quote">“Tight, stylish, and packed with story energy.”</blockquote>
-          <p class="review-note">A quick-hit quote with punch.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Atlas of Fiction</div>
-          <blockquote class="review-quote">“The book turns a strange premise into a convincing emotional journey.”</blockquote>
-          <p class="review-note">Balances concept and heart.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Spotlight Edition</div>
-          <blockquote class="review-quote">“A polished thriller with room for discussion, not just reaction.”</blockquote>
-          <p class="review-note">Helps sell the analysis value.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Bookframe</div>
-          <blockquote class="review-quote">“The atmosphere does a lot of the work, and it does it beautifully.”</blockquote>
-          <p class="review-note">Supports the cinematic design.</p>
-        </article>
-        <article class="review-card glass-card floating-quote">
-          <div class="review-source">Reading Room Daily</div>
-          <blockquote class="review-quote">“The best part is how the danger always feels personal.”</blockquote>
-          <p class="review-note">Emphasizes stakes and empathy.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section section-why-read" id="why-read">
-      <div class="section-header">
-        <h2>Why You Should Read It</h2>
-        <p>A persuasive, polished section that explains the value of the book without sounding generic.</p>
-      </div>
-
-      <div class="why-grid">
-
-        <article class="glass-card why-card">
-          <div class="card-kicker">It hooks you quickly</div>
-          <p>The premise is unusual, clear, and easy to get interested in right away.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It has a strong cinematic feel</div>
-          <p>The visuals, pacing, and tension translate well into a premium-looking presentation.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It explores big ideas</div>
-          <p>Mind control, ethics, trust, and identity all show up in ways that are easy to discuss.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It keeps the plot moving</div>
-          <p>The story does not sit still for long, so it stays engaging.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It has memorable conflict</div>
-          <p>The central problem is unique enough to stand out from more ordinary adventure stories.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It works for analysis</div>
-          <p>There are multiple themes you can write about without forcing the interpretation.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It feels modern</div>
-          <p>The science-fiction elements make the story feel current and relevant.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It balances action and thought</div>
-          <p>There is enough tension to stay exciting, but also enough meaning to discuss.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It has strong character pressure</div>
-          <p>The characters are often tested in ways that reveal who they really are.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It makes you think about choice</div>
-          <p>The book keeps returning to whether people truly choose their actions.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It has a cool concept</div>
-          <p>A hypnosis-centered thriller is naturally attention-grabbing.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It supports discussion</div>
-          <p>You can talk about power, control, friendship, and responsibility after reading it.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It feels polished</div>
-          <p>The story structure and momentum make it easy to follow and present.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It is emotionally grounded</div>
-          <p>Even with the unusual premise, the characters still feel human.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It gives you visual inspiration</div>
-          <p>The setting and mood work great for a dramatic website or school project.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It rewards careful reading</div>
-          <p>Small details and decisions become more meaningful later.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It has suspense without chaos</div>
-          <p>The tension is strong, but the story remains organized.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It has a clear message</div>
-          <p>Power without wisdom creates problems that are bigger than the power itself.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It is easy to recommend</div>
-          <p>The concept alone is enough to make many readers curious.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It leaves a strong impression</div>
-          <p>The book’s ideas stay in your head after you finish.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It feels like a premium pick</div>
-          <p>The subject matter and style make it feel more elevated than a generic title.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It has discussion-friendly themes</div>
-          <p>That makes it useful for class presentations and review pages.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It has a distinctive mood</div>
-          <p>The atmosphere is tense, sleek, and a little eerie.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It gives you a strong thesis</div>
-          <p>A project can easily center on the book’s warning about control.</p>
-        </article>
-        <article class="glass-card why-card">
-          <div class="card-kicker">It is built for design</div>
-          <p>The book’s tone pairs well with glassmorphism, lighting, and dramatic layouts.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section section-deep-dive" id="deep-dive">
-      <div class="section-header">
-        <h2>Deep Dive Notes</h2>
-        <p>Extra info for a fuller, more complete presentation page.</p>
-      </div>
-
-      <div class="notes-grid">
-
-        <article class="glass-card note-card">
-          <div class="card-kicker">Core idea</div>
-          <p>Control without consent creates fear.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Hero tension</div>
-          <p>The main character’s uncertainty is part of the hook.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Villain pressure</div>
-          <p>Opposing forces feel smarter when they are patient.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Theme note</div>
-          <p>Trust is tested more than once.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Mood note</div>
-          <p>The atmosphere should feel polished and uneasy.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Structure note</div>
-          <p>Each section should add information, not clutter.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Design note</div>
-          <p>Glass panels help the page feel premium.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Motion note</div>
-          <p>Subtle movement works better than loud animation.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Review note</div>
-          <p>Short quote cards scan better than long paragraphs.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Analysis note</div>
-          <p>Themes should sound specific, not generic.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Character note</div>
-          <p>Every character should have a job in the story.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Reader note</div>
-          <p>Explain why the book matters, not just what happens.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Hook note</div>
-          <p>Open with a question or a dramatic claim.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Depth note</div>
-          <p>Use cause and effect when describing the plot.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Tone note</div>
-          <p>Keep the language confident and cinematic.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Balance note</div>
-          <p>Mix summary with interpretation.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Layout note</div>
-          <p>Use spacing to make the page feel expensive.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Copy note</div>
-          <p>Longer is fine as long as it is organized.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Content note</div>
-          <p>Make the sections feel connected.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Detail note</div>
-          <p>Add enough information to support a presentation.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Scroll note</div>
-          <p>Break content into clear visual chapters.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Impact note</div>
-          <p>End each section with a strong idea.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Purpose note</div>
-          <p>This page should help a reader understand the book.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Style note</div>
-          <p>Professional beats crowded.</p>
-        </article>
-        <article class="glass-card note-card">
-          <div class="card-kicker">Final note</div>
-          <p>The page should feel finished, not temporary.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section section-extended" id="extended">
-      <div class="section-header">
-        <h2>Expanded Discussion</h2>
-        <p>A wider bank of points you can use for class discussion, speaking, or a presentation voice-over.</p>
-      </div>
-
-      <div class="discussion-grid">
-
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 1</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 2</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 3</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 4</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 5</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 6</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 7</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 8</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 9</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 10</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 11</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 12</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 13</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 14</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 15</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 16</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 17</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 18</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 19</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 20</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 21</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 22</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 23</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 24</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 25</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 26</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 27</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 28</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 29</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-        <article class="glass-card discussion-card">
-          <div class="card-kicker">Discussion point 30</div>
-          <p>This is an extra analytical note about how the book builds tension, develops trust, or uses its premise to keep the reader focused.</p>
-          <p>It helps the page feel complete and adds useful content for a project that needs substance, not just style.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section section-summary" id="summary">
-      <div class="summary-shell glass-card">
-        <div class="card-kicker">Final Takeaway</div>
-        <h2>Why the Book Works</h2>
+      <section class="section reviews reveal-on-scroll">
+        <h2>Reviews</h2>
         <p>
-          <strong>The Hypnotists</strong> works because it takes a strange, high-concept idea and makes it emotionally believable.
-          The story keeps the tension sharp, the stakes personal, and the themes easy to understand without making them feel shallow.
+          A few stylized quote cards to give the page a polished, cinematic feel.
         </p>
-        <p>
-          That is what makes it strong for a presentation page: it gives you suspense, meaning, characters, and a clean central message all at once.
-          The book is good not just because it is interesting, but because it stays interesting while also saying something worth remembering.
-        </p>
-      </div>
-    </section>
-  <!-- Section note 001: premium layout detail -->
-  <!-- Section note 001: designed for clarity and pacing -->
-  <!-- Section note 001: supports a cinematic presentation -->
-  <!-- Section note 001: pairs with external CSS and JS -->
-  <!-- Section note 001: keeps the page organized -->
-  <!-- Section note 002: premium layout detail -->
-  <!-- Section note 002: designed for clarity and pacing -->
-  <!-- Section note 002: supports a cinematic presentation -->
-  <!-- Section note 002: pairs with external CSS and JS -->
-  <!-- Section note 002: keeps the page organized -->
-  <!-- Section note 003: premium layout detail -->
-  <!-- Section note 003: designed for clarity and pacing -->
-  <!-- Section note 003: supports a cinematic presentation -->
-  <!-- Section note 003: pairs with external CSS and JS -->
-  <!-- Section note 003: keeps the page organized -->
-  <!-- Section note 004: premium layout detail -->
-  <!-- Section note 004: designed for clarity and pacing -->
-  <!-- Section note 004: supports a cinematic presentation -->
-  <!-- Section note 004: pairs with external CSS and JS -->
-  <!-- Section note 004: keeps the page organized -->
-  <!-- Section note 005: premium layout detail -->
-  <!-- Section note 005: designed for clarity and pacing -->
-  <!-- Section note 005: supports a cinematic presentation -->
-  <!-- Section note 005: pairs with external CSS and JS -->
-  <!-- Section note 005: keeps the page organized -->
-  <!-- Section note 006: premium layout detail -->
-  <!-- Section note 006: designed for clarity and pacing -->
-  <!-- Section note 006: supports a cinematic presentation -->
-  <!-- Section note 006: pairs with external CSS and JS -->
-  <!-- Section note 006: keeps the page organized -->
-  <!-- Section note 007: premium layout detail -->
-  <!-- Section note 007: designed for clarity and pacing -->
-  <!-- Section note 007: supports a cinematic presentation -->
-  <!-- Section note 007: pairs with external CSS and JS -->
-  <!-- Section note 007: keeps the page organized -->
-  <!-- Section note 008: premium layout detail -->
-  <!-- Section note 008: designed for clarity and pacing -->
-  <!-- Section note 008: supports a cinematic presentation -->
-  <!-- Section note 008: pairs with external CSS and JS -->
-  <!-- Section note 008: keeps the page organized -->
-  <!-- Section note 009: premium layout detail -->
-  <!-- Section note 009: designed for clarity and pacing -->
-  <!-- Section note 009: supports a cinematic presentation -->
-  <!-- Section note 009: pairs with external CSS and JS -->
-  <!-- Section note 009: keeps the page organized -->
-  <!-- Section note 010: premium layout detail -->
-  <!-- Section note 010: designed for clarity and pacing -->
-  <!-- Section note 010: supports a cinematic presentation -->
-  <!-- Section note 010: pairs with external CSS and JS -->
-  <!-- Section note 010: keeps the page organized -->
-  <!-- Section note 011: premium layout detail -->
-  <!-- Section note 011: designed for clarity and pacing -->
-  <!-- Section note 011: supports a cinematic presentation -->
-  <!-- Section note 011: pairs with external CSS and JS -->
-  <!-- Section note 011: keeps the page organized -->
-  <!-- Section note 012: premium layout detail -->
-  <!-- Section note 012: designed for clarity and pacing -->
-  <!-- Section note 012: supports a cinematic presentation -->
-  <!-- Section note 012: pairs with external CSS and JS -->
-  <!-- Section note 012: keeps the page organized -->
-  <!-- Section note 013: premium layout detail -->
-  <!-- Section note 013: designed for clarity and pacing -->
-  <!-- Section note 013: supports a cinematic presentation -->
-  <!-- Section note 013: pairs with external CSS and JS -->
-  <!-- Section note 013: keeps the page organized -->
-  <!-- Section note 014: premium layout detail -->
-  <!-- Section note 014: designed for clarity and pacing -->
-  <!-- Section note 014: supports a cinematic presentation -->
-  <!-- Section note 014: pairs with external CSS and JS -->
-  <!-- Section note 014: keeps the page organized -->
-  <!-- Section note 015: premium layout detail -->
-  <!-- Section note 015: designed for clarity and pacing -->
-  <!-- Section note 015: supports a cinematic presentation -->
-  <!-- Section note 015: pairs with external CSS and JS -->
-  <!-- Section note 015: keeps the page organized -->
-  <!-- Section note 016: premium layout detail -->
-  <!-- Section note 016: designed for clarity and pacing -->
-  <!-- Section note 016: supports a cinematic presentation -->
-  <!-- Section note 016: pairs with external CSS and JS -->
-  <!-- Section note 016: keeps the page organized -->
-  <!-- Section note 017: premium layout detail -->
-  <!-- Section note 017: designed for clarity and pacing -->
-  <!-- Section note 017: supports a cinematic presentation -->
-  <!-- Section note 017: pairs with external CSS and JS -->
-  <!-- Section note 017: keeps the page organized -->
-  <!-- Section note 018: premium layout detail -->
-  <!-- Section note 018: designed for clarity and pacing -->
-  <!-- Section note 018: supports a cinematic presentation -->
-  <!-- Section note 018: pairs with external CSS and JS -->
-  <!-- Section note 018: keeps the page organized -->
-  <!-- Section note 019: premium layout detail -->
-  <!-- Section note 019: designed for clarity and pacing -->
-  <!-- Section note 019: supports a cinematic presentation -->
-  <!-- Section note 019: pairs with external CSS and JS -->
-  <!-- Section note 019: keeps the page organized -->
-  <!-- Section note 020: premium layout detail -->
-  <!-- Section note 020: designed for clarity and pacing -->
-  <!-- Section note 020: supports a cinematic presentation -->
-  <!-- Section note 020: pairs with external CSS and JS -->
-  <!-- Section note 020: keeps the page organized -->
-  <!-- Section note 021: premium layout detail -->
-  <!-- Section note 021: designed for clarity and pacing -->
-  <!-- Section note 021: supports a cinematic presentation -->
-  <!-- Section note 021: pairs with external CSS and JS -->
-  <!-- Section note 021: keeps the page organized -->
-  <!-- Section note 022: premium layout detail -->
-  <!-- Section note 022: designed for clarity and pacing -->
-  <!-- Section note 022: supports a cinematic presentation -->
-  <!-- Section note 022: pairs with external CSS and JS -->
-  <!-- Section note 022: keeps the page organized -->
-  <!-- Section note 023: premium layout detail -->
-  <!-- Section note 023: designed for clarity and pacing -->
-  <!-- Section note 023: supports a cinematic presentation -->
-  <!-- Section note 023: pairs with external CSS and JS -->
-  <!-- Section note 023: keeps the page organized -->
-  <!-- Section note 024: premium layout detail -->
-  <!-- Section note 024: designed for clarity and pacing -->
-  <!-- Section note 024: supports a cinematic presentation -->
-  <!-- Section note 024: pairs with external CSS and JS -->
-  <!-- Section note 024: keeps the page organized -->
-  <!-- Section note 025: premium layout detail -->
-  <!-- Section note 025: designed for clarity and pacing -->
-  <!-- Section note 025: supports a cinematic presentation -->
-  <!-- Section note 025: pairs with external CSS and JS -->
-  <!-- Section note 025: keeps the page organized -->
-  <!-- Section note 026: premium layout detail -->
-  <!-- Section note 026: designed for clarity and pacing -->
-  <!-- Section note 026: supports a cinematic presentation -->
-  <!-- Section note 026: pairs with external CSS and JS -->
-  <!-- Section note 026: keeps the page organized -->
-  <!-- Section note 027: premium layout detail -->
-  <!-- Section note 027: designed for clarity and pacing -->
-  <!-- Section note 027: supports a cinematic presentation -->
-  <!-- Section note 027: pairs with external CSS and JS -->
-  <!-- Section note 027: keeps the page organized -->
-  <!-- Section note 028: premium layout detail -->
-  <!-- Section note 028: designed for clarity and pacing -->
-  <!-- Section note 028: supports a cinematic presentation -->
-  <!-- Section note 028: pairs with external CSS and JS -->
-  <!-- Section note 028: keeps the page organized -->
-  <!-- Section note 029: premium layout detail -->
-  <!-- Section note 029: designed for clarity and pacing -->
-  <!-- Section note 029: supports a cinematic presentation -->
-  <!-- Section note 029: pairs with external CSS and JS -->
-  <!-- Section note 029: keeps the page organized -->
-  <!-- Section note 030: premium layout detail -->
-  <!-- Section note 030: designed for clarity and pacing -->
-  <!-- Section note 030: supports a cinematic presentation -->
-  <!-- Section note 030: pairs with external CSS and JS -->
-  <!-- Section note 030: keeps the page organized -->
-  <!-- Section note 031: premium layout detail -->
-  <!-- Section note 031: designed for clarity and pacing -->
-  <!-- Section note 031: supports a cinematic presentation -->
-  <!-- Section note 031: pairs with external CSS and JS -->
-  <!-- Section note 031: keeps the page organized -->
-  <!-- Section note 032: premium layout detail -->
-  <!-- Section note 032: designed for clarity and pacing -->
-  <!-- Section note 032: supports a cinematic presentation -->
-  <!-- Section note 032: pairs with external CSS and JS -->
-  <!-- Section note 032: keeps the page organized -->
-  <!-- Section note 033: premium layout detail -->
-  <!-- Section note 033: designed for clarity and pacing -->
-  <!-- Section note 033: supports a cinematic presentation -->
-  <!-- Section note 033: pairs with external CSS and JS -->
-  <!-- Section note 033: keeps the page organized -->
-  <!-- Section note 034: premium layout detail -->
-  <!-- Section note 034: designed for clarity and pacing -->
-  <!-- Section note 034: supports a cinematic presentation -->
-  <!-- Section note 034: pairs with external CSS and JS -->
-  <!-- Section note 034: keeps the page organized -->
-  <!-- Section note 035: premium layout detail -->
-  <!-- Section note 035: designed for clarity and pacing -->
-  <!-- Section note 035: supports a cinematic presentation -->
-  <!-- Section note 035: pairs with external CSS and JS -->
-  <!-- Section note 035: keeps the page organized -->
-  <!-- Section note 036: premium layout detail -->
-  <!-- Section note 036: designed for clarity and pacing -->
-  <!-- Section note 036: supports a cinematic presentation -->
-  <!-- Section note 036: pairs with external CSS and JS -->
-  <!-- Section note 036: keeps the page organized -->
-  <!-- Section note 037: premium layout detail -->
-  <!-- Section note 037: designed for clarity and pacing -->
-  <!-- Section note 037: supports a cinematic presentation -->
-  <!-- Section note 037: pairs with external CSS and JS -->
-  <!-- Section note 037: keeps the page organized -->
-  <!-- Section note 038: premium layout detail -->
-  <!-- Section note 038: designed for clarity and pacing -->
-  <!-- Section note 038: supports a cinematic presentation -->
-  <!-- Section note 038: pairs with external CSS and JS -->
-  <!-- Section note 038: keeps the page organized -->
-  <!-- Section note 039: premium layout detail -->
-  <!-- Section note 039: designed for clarity and pacing -->
-  <!-- Section note 039: supports a cinematic presentation -->
-  <!-- Section note 039: pairs with external CSS and JS -->
-  <!-- Section note 039: keeps the page organized -->
-  <!-- Section note 040: premium layout detail -->
-  <!-- Section note 040: designed for clarity and pacing -->
-  <!-- Section note 040: supports a cinematic presentation -->
-  <!-- Section note 040: pairs with external CSS and JS -->
-  <!-- Section note 040: keeps the page organized -->
-  <!-- Section note 041: premium layout detail -->
-  <!-- Section note 041: designed for clarity and pacing -->
-  <!-- Section note 041: supports a cinematic presentation -->
-  <!-- Section note 041: pairs with external CSS and JS -->
-  <!-- Section note 041: keeps the page organized -->
-  <!-- Section note 042: premium layout detail -->
-  <!-- Section note 042: designed for clarity and pacing -->
-  <!-- Section note 042: supports a cinematic presentation -->
-  <!-- Section note 042: pairs with external CSS and JS -->
-  <!-- Section note 042: keeps the page organized -->
-  <!-- Section note 043: premium layout detail -->
-  <!-- Section note 043: designed for clarity and pacing -->
-  <!-- Section note 043: supports a cinematic presentation -->
-  <!-- Section note 043: pairs with external CSS and JS -->
-  <!-- Section note 043: keeps the page organized -->
-  <!-- Section note 044: premium layout detail -->
-  <!-- Section note 044: designed for clarity and pacing -->
-  <!-- Section note 044: supports a cinematic presentation -->
-  <!-- Section note 044: pairs with external CSS and JS -->
-  <!-- Section note 044: keeps the page organized -->
-  <!-- Section note 045: premium layout detail -->
-  <!-- Section note 045: designed for clarity and pacing -->
-  <!-- Section note 045: supports a cinematic presentation -->
-  <!-- Section note 045: pairs with external CSS and JS -->
-  <!-- Section note 045: keeps the page organized -->
-  <!-- Section note 046: premium layout detail -->
-  <!-- Section note 046: designed for clarity and pacing -->
-  <!-- Section note 046: supports a cinematic presentation -->
-  <!-- Section note 046: pairs with external CSS and JS -->
-  <!-- Section note 046: keeps the page organized -->
-  <!-- Section note 047: premium layout detail -->
-  <!-- Section note 047: designed for clarity and pacing -->
-  <!-- Section note 047: supports a cinematic presentation -->
-  <!-- Section note 047: pairs with external CSS and JS -->
-  <!-- Section note 047: keeps the page organized -->
-  <!-- Section note 048: premium layout detail -->
-  <!-- Section note 048: designed for clarity and pacing -->
-  <!-- Section note 048: supports a cinematic presentation -->
-  <!-- Section note 048: pairs with external CSS and JS -->
-  <!-- Section note 048: keeps the page organized -->
-  <!-- Section note 049: premium layout detail -->
-  <!-- Section note 049: designed for clarity and pacing -->
-  <!-- Section note 049: supports a cinematic presentation -->
-  <!-- Section note 049: pairs with external CSS and JS -->
-  <!-- Section note 049: keeps the page organized -->
-  <!-- Section note 050: premium layout detail -->
-  <!-- Section note 050: designed for clarity and pacing -->
-  <!-- Section note 050: supports a cinematic presentation -->
-  <!-- Section note 050: pairs with external CSS and JS -->
-  <!-- Section note 050: keeps the page organized -->
-  <!-- Section note 051: premium layout detail -->
-  <!-- Section note 051: designed for clarity and pacing -->
-  <!-- Section note 051: supports a cinematic presentation -->
-  <!-- Section note 051: pairs with external CSS and JS -->
-  <!-- Section note 051: keeps the page organized -->
-  <!-- Section note 052: premium layout detail -->
-  <!-- Section note 052: designed for clarity and pacing -->
-  <!-- Section note 052: supports a cinematic presentation -->
-  <!-- Section note 052: pairs with external CSS and JS -->
-  <!-- Section note 052: keeps the page organized -->
-  <!-- Section note 053: premium layout detail -->
-  <!-- Section note 053: designed for clarity and pacing -->
-  <!-- Section note 053: supports a cinematic presentation -->
-  <!-- Section note 053: pairs with external CSS and JS -->
-  <!-- Section note 053: keeps the page organized -->
-  <!-- Section note 054: premium layout detail -->
-  <!-- Section note 054: designed for clarity and pacing -->
-  <!-- Section note 054: supports a cinematic presentation -->
-  <!-- Section note 054: pairs with external CSS and JS -->
-  <!-- Section note 054: keeps the page organized -->
-  <!-- Section note 055: premium layout detail -->
-  <!-- Section note 055: designed for clarity and pacing -->
-  <!-- Section note 055: supports a cinematic presentation -->
-  <!-- Section note 055: pairs with external CSS and JS -->
-  <!-- Section note 055: keeps the page organized -->
-  <!-- Section note 056: premium layout detail -->
-  <!-- Section note 056: designed for clarity and pacing -->
-  <!-- Section note 056: supports a cinematic presentation -->
-  <!-- Section note 056: pairs with external CSS and JS -->
-  <!-- Section note 056: keeps the page organized -->
-  <!-- Section note 057: premium layout detail -->
-  <!-- Section note 057: designed for clarity and pacing -->
-  <!-- Section note 057: supports a cinematic presentation -->
-  <!-- Section note 057: pairs with external CSS and JS -->
-  <!-- Section note 057: keeps the page organized -->
-  <!-- Section note 058: premium layout detail -->
-  <!-- Section note 058: designed for clarity and pacing -->
-  <!-- Section note 058: supports a cinematic presentation -->
-  <!-- Section note 058: pairs with external CSS and JS -->
-  <!-- Section note 058: keeps the page organized -->
-  <!-- Section note 059: premium layout detail -->
-  <!-- Section note 059: designed for clarity and pacing -->
-  <!-- Section note 059: supports a cinematic presentation -->
-  <!-- Section note 059: pairs with external CSS and JS -->
-  <!-- Section note 059: keeps the page organized -->
-  <!-- Section note 060: premium layout detail -->
-  <!-- Section note 060: designed for clarity and pacing -->
-  <!-- Section note 060: supports a cinematic presentation -->
-  <!-- Section note 060: pairs with external CSS and JS -->
-  <!-- Section note 060: keeps the page organized -->
-  <!-- Section note 061: premium layout detail -->
-  <!-- Section note 061: designed for clarity and pacing -->
-  <!-- Section note 061: supports a cinematic presentation -->
-  <!-- Section note 061: pairs with external CSS and JS -->
-  <!-- Section note 061: keeps the page organized -->
-  <!-- Section note 062: premium layout detail -->
-  <!-- Section note 062: designed for clarity and pacing -->
-  <!-- Section note 062: supports a cinematic presentation -->
-  <!-- Section note 062: pairs with external CSS and JS -->
-  <!-- Section note 062: keeps the page organized -->
-  <!-- Section note 063: premium layout detail -->
-  <!-- Section note 063: designed for clarity and pacing -->
-  <!-- Section note 063: supports a cinematic presentation -->
-  <!-- Section note 063: pairs with external CSS and JS -->
-  <!-- Section note 063: keeps the page organized -->
-  <!-- Section note 064: premium layout detail -->
-  <!-- Section note 064: designed for clarity and pacing -->
-  <!-- Section note 064: supports a cinematic presentation -->
-  <!-- Section note 064: pairs with external CSS and JS -->
-  <!-- Section note 064: keeps the page organized -->
-  <!-- Section note 065: premium layout detail -->
-  <!-- Section note 065: designed for clarity and pacing -->
-  <!-- Section note 065: supports a cinematic presentation -->
-  <!-- Section note 065: pairs with external CSS and JS -->
-  <!-- Section note 065: keeps the page organized -->
-  <!-- Section note 066: premium layout detail -->
-  <!-- Section note 066: designed for clarity and pacing -->
-  <!-- Section note 066: supports a cinematic presentation -->
-  <!-- Section note 066: pairs with external CSS and JS -->
-  <!-- Section note 066: keeps the page organized -->
-  <!-- Section note 067: premium layout detail -->
-  <!-- Section note 067: designed for clarity and pacing -->
-  <!-- Section note 067: supports a cinematic presentation -->
-  <!-- Section note 067: pairs with external CSS and JS -->
-  <!-- Section note 067: keeps the page organized -->
-  <!-- Section note 068: premium layout detail -->
-  <!-- Section note 068: designed for clarity and pacing -->
-  <!-- Section note 068: supports a cinematic presentation -->
-  <!-- Section note 068: pairs with external CSS and JS -->
-  <!-- Section note 068: keeps the page organized -->
-  <!-- Section note 069: premium layout detail -->
-  <!-- Section note 069: designed for clarity and pacing -->
-  <!-- Section note 069: supports a cinematic presentation -->
-  <!-- Section note 069: pairs with external CSS and JS -->
-  <!-- Section note 069: keeps the page organized -->
-  <!-- Section note 070: premium layout detail -->
-  <!-- Section note 070: designed for clarity and pacing -->
-  <!-- Section note 070: supports a cinematic presentation -->
-  <!-- Section note 070: pairs with external CSS and JS -->
-  <!-- Section note 070: keeps the page organized -->
-  <!-- Section note 071: premium layout detail -->
-  <!-- Section note 071: designed for clarity and pacing -->
-  <!-- Section note 071: supports a cinematic presentation -->
-  <!-- Section note 071: pairs with external CSS and JS -->
-  <!-- Section note 071: keeps the page organized -->
-  <!-- Section note 072: premium layout detail -->
-  <!-- Section note 072: designed for clarity and pacing -->
-  <!-- Section note 072: supports a cinematic presentation -->
-  <!-- Section note 072: pairs with external CSS and JS -->
-  <!-- Section note 072: keeps the page organized -->
-  <!-- Section note 073: premium layout detail -->
-  <!-- Section note 073: designed for clarity and pacing -->
-  <!-- Section note 073: supports a cinematic presentation -->
-  <!-- Section note 073: pairs with external CSS and JS -->
-  <!-- Section note 073: keeps the page organized -->
-  <!-- Section note 074: premium layout detail -->
-  <!-- Section note 074: designed for clarity and pacing -->
-  <!-- Section note 074: supports a cinematic presentation -->
-  <!-- Section note 074: pairs with external CSS and JS -->
-  <!-- Section note 074: keeps the page organized -->
-  <!-- Section note 075: premium layout detail -->
-  <!-- Section note 075: designed for clarity and pacing -->
-  <!-- Section note 075: supports a cinematic presentation -->
-  <!-- Section note 075: pairs with external CSS and JS -->
-  <!-- Section note 075: keeps the page organized -->
-  <!-- Section note 076: premium layout detail -->
-  <!-- Section note 076: designed for clarity and pacing -->
-  <!-- Section note 076: supports a cinematic presentation -->
-  <!-- Section note 076: pairs with external CSS and JS -->
-  <!-- Section note 076: keeps the page organized -->
-  <!-- Section note 077: premium layout detail -->
-  <!-- Section note 077: designed for clarity and pacing -->
-  <!-- Section note 077: supports a cinematic presentation -->
-  <!-- Section note 077: pairs with external CSS and JS -->
-  <!-- Section note 077: keeps the page organized -->
-  <!-- Section note 078: premium layout detail -->
-  <!-- Section note 078: designed for clarity and pacing -->
-  <!-- Section note 078: supports a cinematic presentation -->
-  <!-- Section note 078: pairs with external CSS and JS -->
-  <!-- Section note 078: keeps the page organized -->
-  <!-- Section note 079: premium layout detail -->
-  <!-- Section note 079: designed for clarity and pacing -->
-  <!-- Section note 079: supports a cinematic presentation -->
-  <!-- Section note 079: pairs with external CSS and JS -->
-  <!-- Section note 079: keeps the page organized -->
-  <!-- Section note 080: premium layout detail -->
-  <!-- Section note 080: designed for clarity and pacing -->
-  <!-- Section note 080: supports a cinematic presentation -->
-  <!-- Section note 080: pairs with external CSS and JS -->
-  <!-- Section note 080: keeps the page organized -->
-  <!-- Section note 081: premium layout detail -->
-  <!-- Section note 081: designed for clarity and pacing -->
-  <!-- Section note 081: supports a cinematic presentation -->
-  <!-- Section note 081: pairs with external CSS and JS -->
-  <!-- Section note 081: keeps the page organized -->
-  <!-- Section note 082: premium layout detail -->
-  <!-- Section note 082: designed for clarity and pacing -->
-  <!-- Section note 082: supports a cinematic presentation -->
-  <!-- Section note 082: pairs with external CSS and JS -->
-  <!-- Section note 082: keeps the page organized -->
-  <!-- Section note 083: premium layout detail -->
-  <!-- Section note 083: designed for clarity and pacing -->
-  <!-- Section note 083: supports a cinematic presentation -->
-  <!-- Section note 083: pairs with external CSS and JS -->
-  <!-- Section note 083: keeps the page organized -->
-  <!-- Section note 084: premium layout detail -->
-  <!-- Section note 084: designed for clarity and pacing -->
-  <!-- Section note 084: supports a cinematic presentation -->
-  <!-- Section note 084: pairs with external CSS and JS -->
-  <!-- Section note 084: keeps the page organized -->
-  <!-- Section note 085: premium layout detail -->
-  <!-- Section note 085: designed for clarity and pacing -->
-  <!-- Section note 085: supports a cinematic presentation -->
-  <!-- Section note 085: pairs with external CSS and JS -->
-  <!-- Section note 085: keeps the page organized -->
-  <!-- Section note 086: premium layout detail -->
-  <!-- Section note 086: designed for clarity and pacing -->
-  <!-- Section note 086: supports a cinematic presentation -->
-  <!-- Section note 086: pairs with external CSS and JS -->
-  <!-- Section note 086: keeps the page organized -->
-  <!-- Section note 087: premium layout detail -->
-  <!-- Section note 087: designed for clarity and pacing -->
-  <!-- Section note 087: supports a cinematic presentation -->
-  <!-- Section note 087: pairs with external CSS and JS -->
-  <!-- Section note 087: keeps the page organized -->
-  <!-- Section note 088: premium layout detail -->
-  <!-- Section note 088: designed for clarity and pacing -->
-  <!-- Section note 088: supports a cinematic presentation -->
-  <!-- Section note 088: pairs with external CSS and JS -->
-  <!-- Section note 088: keeps the page organized -->
-  <!-- Section note 089: premium layout detail -->
-  <!-- Section note 089: designed for clarity and pacing -->
-  <!-- Section note 089: supports a cinematic presentation -->
-  <!-- Section note 089: pairs with external CSS and JS -->
-  <!-- Section note 089: keeps the page organized -->
-  <!-- Section note 090: premium layout detail -->
-  <!-- Section note 090: designed for clarity and pacing -->
-  <!-- Section note 090: supports a cinematic presentation -->
-  <!-- Section note 090: pairs with external CSS and JS -->
-  <!-- Section note 090: keeps the page organized -->
-  <!-- Section note 091: premium layout detail -->
-  <!-- Section note 091: designed for clarity and pacing -->
-  <!-- Section note 091: supports a cinematic presentation -->
-  <!-- Section note 091: pairs with external CSS and JS -->
-  <!-- Section note 091: keeps the page organized -->
-  <!-- Section note 092: premium layout detail -->
-  <!-- Section note 092: designed for clarity and pacing -->
-  <!-- Section note 092: supports a cinematic presentation -->
-  <!-- Section note 092: pairs with external CSS and JS -->
-  <!-- Section note 092: keeps the page organized -->
-  <!-- Section note 093: premium layout detail -->
-  <!-- Section note 093: designed for clarity and pacing -->
-  <!-- Section note 093: supports a cinematic presentation -->
-  <!-- Section note 093: pairs with external CSS and JS -->
-  <!-- Section note 093: keeps the page organized -->
-  <!-- Section note 094: premium layout detail -->
-  <!-- Section note 094: designed for clarity and pacing -->
-  <!-- Section note 094: supports a cinematic presentation -->
-  <!-- Section note 094: pairs with external CSS and JS -->
-  <!-- Section note 094: keeps the page organized -->
-  <!-- Section note 095: premium layout detail -->
-  <!-- Section note 095: designed for clarity and pacing -->
-  <!-- Section note 095: supports a cinematic presentation -->
-  <!-- Section note 095: pairs with external CSS and JS -->
-  <!-- Section note 095: keeps the page organized -->
-  <!-- Section note 096: premium layout detail -->
-  <!-- Section note 096: designed for clarity and pacing -->
-  <!-- Section note 096: supports a cinematic presentation -->
-  <!-- Section note 096: pairs with external CSS and JS -->
-  <!-- Section note 096: keeps the page organized -->
-  <!-- Section note 097: premium layout detail -->
-  <!-- Section note 097: designed for clarity and pacing -->
-  <!-- Section note 097: supports a cinematic presentation -->
-  <!-- Section note 097: pairs with external CSS and JS -->
-  <!-- Section note 097: keeps the page organized -->
-  <!-- Section note 098: premium layout detail -->
-  <!-- Section note 098: designed for clarity and pacing -->
-  <!-- Section note 098: supports a cinematic presentation -->
-  <!-- Section note 098: pairs with external CSS and JS -->
-  <!-- Section note 098: keeps the page organized -->
-  <!-- Section note 099: premium layout detail -->
-  <!-- Section note 099: designed for clarity and pacing -->
-  <!-- Section note 099: supports a cinematic presentation -->
-  <!-- Section note 099: pairs with external CSS and JS -->
-  <!-- Section note 099: keeps the page organized -->
-  <!-- Section note 100: premium layout detail -->
-  <!-- Section note 100: designed for clarity and pacing -->
-  <!-- Section note 100: supports a cinematic presentation -->
-  <!-- Section note 100: pairs with external CSS and JS -->
-  <!-- Section note 100: keeps the page organized -->
-  <!-- Section note 101: premium layout detail -->
-  <!-- Section note 101: designed for clarity and pacing -->
-  <!-- Section note 101: supports a cinematic presentation -->
-  <!-- Section note 101: pairs with external CSS and JS -->
-  <!-- Section note 101: keeps the page organized -->
-  <!-- Section note 102: premium layout detail -->
-  <!-- Section note 102: designed for clarity and pacing -->
-  <!-- Section note 102: supports a cinematic presentation -->
-  <!-- Section note 102: pairs with external CSS and JS -->
-  <!-- Section note 102: keeps the page organized -->
-  <!-- Section note 103: premium layout detail -->
-  <!-- Section note 103: designed for clarity and pacing -->
-  <!-- Section note 103: supports a cinematic presentation -->
-  <!-- Section note 103: pairs with external CSS and JS -->
-  <!-- Section note 103: keeps the page organized -->
-  <!-- Section note 104: premium layout detail -->
-  <!-- Section note 104: designed for clarity and pacing -->
-  <!-- Section note 104: supports a cinematic presentation -->
-  <!-- Section note 104: pairs with external CSS and JS -->
-  <!-- Section note 104: keeps the page organized -->
-  <!-- Section note 105: premium layout detail -->
-  <!-- Section note 105: designed for clarity and pacing -->
-  <!-- Section note 105: supports a cinematic presentation -->
-  <!-- Section note 105: pairs with external CSS and JS -->
-  <!-- Section note 105: keeps the page organized -->
-  <!-- Section note 106: premium layout detail -->
-  <!-- Section note 106: designed for clarity and pacing -->
-  <!-- Section note 106: supports a cinematic presentation -->
-  <!-- Section note 106: pairs with external CSS and JS -->
-  <!-- Section note 106: keeps the page organized -->
-  <!-- Section note 107: premium layout detail -->
-  <!-- Section note 107: designed for clarity and pacing -->
-  <!-- Section note 107: supports a cinematic presentation -->
-  <!-- Section note 107: pairs with external CSS and JS -->
-  <!-- Section note 107: keeps the page organized -->
-  <!-- Section note 108: premium layout detail -->
-  <!-- Section note 108: designed for clarity and pacing -->
-  <!-- Section note 108: supports a cinematic presentation -->
-  <!-- Section note 108: pairs with external CSS and JS -->
-  <!-- Section note 108: keeps the page organized -->
-  <!-- Section note 109: premium layout detail -->
-  <!-- Section note 109: designed for clarity and pacing -->
-  <!-- Section note 109: supports a cinematic presentation -->
-  <!-- Section note 109: pairs with external CSS and JS -->
-  <!-- Section note 109: keeps the page organized -->
-  <!-- Section note 110: premium layout detail -->
-  <!-- Section note 110: designed for clarity and pacing -->
-  <!-- Section note 110: supports a cinematic presentation -->
-  <!-- Section note 110: pairs with external CSS and JS -->
-  <!-- Section note 110: keeps the page organized -->
-  <!-- Section note 111: premium layout detail -->
-  <!-- Section note 111: designed for clarity and pacing -->
-  <!-- Section note 111: supports a cinematic presentation -->
-  <!-- Section note 111: pairs with external CSS and JS -->
-  <!-- Section note 111: keeps the page organized -->
-  <!-- Section note 112: premium layout detail -->
-  <!-- Section note 112: designed for clarity and pacing -->
-  <!-- Section note 112: supports a cinematic presentation -->
-  <!-- Section note 112: pairs with external CSS and JS -->
-  <!-- Section note 112: keeps the page organized -->
-  <!-- Section note 113: premium layout detail -->
-  <!-- Section note 113: designed for clarity and pacing -->
-  <!-- Section note 113: supports a cinematic presentation -->
-  <!-- Section note 113: pairs with external CSS and JS -->
-  <!-- Section note 113: keeps the page organized -->
-  <!-- Section note 114: premium layout detail -->
-  <!-- Section note 114: designed for clarity and pacing -->
-  <!-- Section note 114: supports a cinematic presentation -->
-  <!-- Section note 114: pairs with external CSS and JS -->
-  <!-- Section note 114: keeps the page organized -->
-  <!-- Section note 115: premium layout detail -->
-  <!-- Section note 115: designed for clarity and pacing -->
-  <!-- Section note 115: supports a cinematic presentation -->
-  <!-- Section note 115: pairs with external CSS and JS -->
-  <!-- Section note 115: keeps the page organized -->
-  <!-- Section note 116: premium layout detail -->
-  <!-- Section note 116: designed for clarity and pacing -->
-  <!-- Section note 116: supports a cinematic presentation -->
-  <!-- Section note 116: pairs with external CSS and JS -->
-  <!-- Section note 116: keeps the page organized -->
-  <!-- Section note 117: premium layout detail -->
-  <!-- Section note 117: designed for clarity and pacing -->
-  <!-- Section note 117: supports a cinematic presentation -->
-  <!-- Section note 117: pairs with external CSS and JS -->
-  <!-- Section note 117: keeps the page organized -->
-  <!-- Section note 118: premium layout detail -->
-  <!-- Section note 118: designed for clarity and pacing -->
-  <!-- Section note 118: supports a cinematic presentation -->
-  <!-- Section note 118: pairs with external CSS and JS -->
-  <!-- Section note 118: keeps the page organized -->
-  <!-- Section note 119: premium layout detail -->
-  <!-- Section note 119: designed for clarity and pacing -->
-  <!-- Section note 119: supports a cinematic presentation -->
-  <!-- Section note 119: pairs with external CSS and JS -->
-  <!-- Section note 119: keeps the page organized -->
-  <!-- Section note 120: premium layout detail -->
-  <!-- Section note 120: designed for clarity and pacing -->
-  <!-- Section note 120: supports a cinematic presentation -->
-  <!-- Section note 120: pairs with external CSS and JS -->
-  <!-- Section note 120: keeps the page organized -->
-  </main>
 
-  <footer class="site-footer">
-    <p>The Hypnotists • Cinematic project layout • Built for style.css and script.js</p>
-  </footer>
+        <div class="review-grid">
+          <article class="review">
+            <p class="quote">“A gripping psychological ride that keeps tightening its hold with every chapter.”</p>
+            <div class="source">— Fiction Review Weekly</div>
+          </article>
 
+          <article class="review">
+            <p class="quote">“Smart, tense, and impossible to ignore. The suspense feels constant.”</p>
+            <div class="source">— The Bestseller Lens</div>
+          </article>
+
+          <article class="review">
+            <p class="quote">“A story that turns the mind into the battleground and never lets up.”</p>
+            <div class="source">— Reader Spotlight</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="characters" class="characters reveal-on-scroll">
+        <div class="characters-head">
+          <div>
+            <h2>Characters</h2>
+            <p>
+              Tap a card to open each character page. These link to <strong>jax.html</strong>, <strong>tommy.html</strong>,
+              and <strong>elias.html</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="card-container">
+          <a href="jax.html" class="card">
+            <div class="floating-badge">Character</div>
+            <img src="jax.png" alt="Jax">
+            <div class="card-content">
+              <h3>Jax</h3>
+              <span>A sharp, central presence shaped by tension, choice, and hidden pressure.</span>
+            </div>
+          </a>
+
+          <a href="tommy.html" class="card">
+            <div class="floating-badge">Character</div>
+            <img src="tommy.png" alt="Tommy">
+            <div class="card-content">
+              <h3>Tommy</h3>
+              <span>Important to the story’s emotional weight and the mystery around influence.</span>
+            </div>
+          </a>
+
+          <a href="elias.html" class="card">
+            <div class="floating-badge">Character</div>
+            <img src="elias.png" alt="Elias">
+            <div class="card-content">
+              <h3>Elias</h3>
+              <span>A character tied to the deeper psychological conflict and larger secrets.</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button id="audioToggle" type="button">🔊 Ambient</button>
+
+  <script>
+    // Reveal on scroll
+    const revealItems = document.querySelectorAll(".reveal-on-scroll, .reveal-on-load");
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal");
+        }
+      });
+    }, { threshold: 0.14 });
+
+    revealItems.forEach((el) => {
+      if (el.classList.contains("reveal-on-load")) {
+        el.classList.add("reveal");
+      } else {
+        revealObserver.observe(el);
+      }
+    });
+
+    // Parallax-lite movement on the page shell only
+    const shell = document.getElementById("pageShell");
+    document.addEventListener("mousemove", (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 10;
+      const y = (e.clientY / window.innerHeight - 0.5) * 10;
+      shell.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
+
+    // Ambient tone toggle
+    const ambientBtn = document.getElementById("ambientBtn");
+    let audioCtx = null;
+    let oscillator = null;
+    let gainNode = null;
+    let ambientOn = false;
+
+    function startAmbient() {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      oscillator = audioCtx.createOscillator();
+      gainNode = audioCtx.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency.value = 55;
+      gainNode.gain.value = 0.03;
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.start();
+
+      ambientOn = true;
+      ambientBtn.textContent = "🔇 Ambient";
+    }
+
+    function stopAmbient() {
+      if (oscillator) {
+        oscillator.stop();
+        oscillator.disconnect();
+      }
+      if (gainNode) gainNode.disconnect();
+      if (audioCtx) audioCtx.close();
+
+      oscillator = null;
+      gainNode = null;
+      audioCtx = null;
+      ambientOn = false;
+      ambientBtn.textContent = "🔊 Ambient";
+    }
+
+    ambientBtn.addEventListener("click", async () => {
+      try {
+        if (!ambientOn) {
+          startAmbient();
+          if (audioCtx && audioCtx.state === "suspended") {
+            await audioCtx.resume();
+          }
+        } else {
+          stopAmbient();
+        }
+      } catch (err) {
+        ambientBtn.textContent = "Audio Blocked";
+      }
+    });
+
+    // Intro safety remove
+    setTimeout(() => {
+      const intro = document.getElementById("intro");
+      if (intro) intro.style.display = "none";
+    }, 5000);
+  </script>
+
+  <!-- Your existing background script -->
   <script src="script.js"></script>
 </body>
 </html>
