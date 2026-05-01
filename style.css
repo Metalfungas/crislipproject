@@ -206,3 +206,7 @@ a {
     bottom: 14px;
   }
 }
+html, body {
+  overflow: hidden;
+  overflow-y: auto;
+}
