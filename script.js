@@ -91,3 +91,5 @@ window.addEventListener("mousemove", (e) => {
     if (intro) intro.remove();
   }, 5200);
 })();
+document.body.style.overflow = "auto";
+document.documentElement.style.overflow = "auto";
